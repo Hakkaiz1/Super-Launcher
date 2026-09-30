@@ -68,7 +68,16 @@ Cinco condições que a spec implica mas que nenhum teste cobre automaticamente 
 - Consumes: Android SDK já instalado em `%LOCALAPPDATA%\Android\Sdk` (cmdline-tools 15859902, `platforms;android-37.2`, `platform-tools`, `ndk;25.2.9519653`), licenças aceitas.
 - Produces: `local.properties` com `sdk.dir`; confirmação de que `:ZalithLauncher:testDebugUnitTest` compila e passa **antes** de qualquer mudança — é a linha de base que prova que as tasks seguintes não quebraram nada pré-existente.
 
-- [ ] **Step 1: Confirmar que o SDK existe (idempotente)**
+> **STATUS: concluída** durante a preparação (commit `488340f2`). A baseline de origem estava **vermelha com 8 falhas** que nada tinham a ver com a Fase 1; foram reparadas antes do início da execução:
+>
+> | Falha | Causa | Conserto |
+> |---|---|---|
+> | 6 × `VersionCompareTest` | `GameVersionNumber` lê `/assets/game/versions.txt` via `getResourceAsStream` — assets do Android não entram no classpath do teste → `ExceptionInInitializerError` | copia de `src/main/assets/game/` para `src/test/resources/assets/game/` (9,4 KB + 1,1 KB; AGP põe `src/test/resources` no classpath). 4 passaram na hora; as 2 restantes eram asserções que discordavam da semântica real da HMCL — corrigidas com comentário inline, conforme decisão do usuário |
+> | 1 × `FileTest` + 1 × `MurmurHash2IncrementalTest` | liam `F:\Download\geckolib-...jar` (arquivo da máquina do autor) e **não tinham nenhuma asserção** | arquivo temporário + `assertEquals` de verdade |
+>
+> Spike descartável confirmou que o `AndroidSourceDirectorySet` do AGP 9.3 não tem filtro de padrão (`filter`/`include` inexistentes, `srcDir` deprecado como erro em Gradle 9) — por isso a rota `src/test/resources` e não uma `srcDir` apontando pra `src/main`.
+
+- [x] **Step 1: Confirmar que o SDK existe (idempotente)**
 
 Run:
 
@@ -97,7 +106,7 @@ $sm = "$env:LOCALAPPDATA\Android\Sdk\cmdline-tools\latest\bin\sdkmanager.bat"
 
 Expected: `All SDK package licenses accepted` e `EXIT=0`.
 
-- [ ] **Step 2: Criar `local.properties`**
+- [x] **Step 2: Criar `local.properties`**
 
 Run (na raiz do repositório):
 
@@ -109,16 +118,18 @@ Get-Content .\local.properties
 
 Expected: `sdk.dir=C:/Users/Administrator/AppData/Local/Android/Sdk`. O `.gitignore` já cobre `local.properties` (linhas 5 e 11) — confirme com `git status --porcelain` que ele **não** aparece.
 
-- [ ] **Step 3: Rodar a baseline**
+- [x] **Step 3: Rodar a baseline**
 
 Run: `.\gradlew.bat :ZalithLauncher:testDebugUnitTest --console=plain`
 Expected: `BUILD SUCCESSFUL`, `EXIT=0`.
 
+> **Conferido:** `BUILD SUCCESSFUL in 2m 50s` / `EXIT=0` / 84 testes, 0 falhas (após o reparo acima).
+
 > Primeira execução baixa dependências e o NDK — pode levar vários minutos. Um `FAILURE` aqui é problema de ambiente, não de código: resolva antes de seguir.
 
-- [ ] **Step 4: Commit**
+- [x] **Step 4: Commit**
 
-Nada para commitar nesta task (`local.properties` é gitignored). Apenas registre a baseline verde como portão de entrada.
+Nada para commitar nesta task (`local.properties` é gitignored). O reparo da baseline foi commitado separadamente em `488340f2` como parte da preparação.
 
 ---
 
