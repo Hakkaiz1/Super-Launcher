@@ -68,8 +68,9 @@ object HomeCards {
     /** 用户卡片类型注册表 */
     val userCardTypes: List<CardType> = listOf(versionCardType)
 
-    /** 系统卡片（不可变更） */
+    /** 系统卡片（不可变更），由启动器自行提供并绘制在网格之外 */
     fun systemCards(): List<SystemCard> = buildList {
+        add(unofficialNoticeCard())
         if (BuildConfig.DEBUG) {
             add(debugWarningCard())
         }
@@ -101,6 +102,28 @@ object HomeCards {
                         .align(Alignment.End),
                     text = stringResource(R.string.launcher_version_debug_warning_cant_close),
                     style = MaterialTheme.typography.bodySmall
+                )
+            }
+        }
+    }
+
+    /**
+     * GPLv3 §7 + repositório: aviso obrigatório de versão modificada.
+     * Incondicional — o dever de licença vale pra qualquer build.
+     */
+    private fun unofficialNoticeCard() = SystemCard(id = "system_unofficial_notice") {
+        BackgroundCard(
+            modifier = Modifier.fillMaxWidth(),
+            shape = MaterialTheme.shapes.extraLarge
+        ) {
+            Column(
+                modifier = Modifier.padding(horizontal = 16.dp, vertical = 12.dp),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.unofficial_modified_notice),
+                    style = MaterialTheme.typography.bodyMedium,
+                    modifier = Modifier.alpha(0.9f)
                 )
             }
         }
