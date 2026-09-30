@@ -152,7 +152,7 @@ Nada para commitar nesta task (`local.properties` é gitignored). O reparo da ba
 
 > Os quatro `DEDICATED_*` usam `hidden=false` (constante em texto puro, não ofuscada) de propósito: são configuração, não segredo, e precisam ser assertáveis em teste unitário. Strings com `hidden=true` passam por decodificação em runtime que, com `isReturnDefaultValues=true`, devolveria `null` silencioso no JVM de teste.
 
-- [ ] **Step 1: Escrever o teste falhando**
+- [x] **Step 1: Escrever o teste falhando**
 
 Crie `ZalithLauncher/src/test/java/com/movtery/zalithlauncher/BuildBrandTest.kt`:
 
@@ -232,12 +232,12 @@ class BuildBrandTest {
 }
 ```
 
-- [ ] **Step 2: Rodar e ver falhar**
+- [x] **Step 2: Rodar e ver falhar**
 
 Run: `.\gradlew.bat :ZalithLauncher:testDebugUnitTest --tests "*BuildBrandTest" --console=plain`
 Expected: `FAILED` — `launcher_name` ainda é `ZalithLauncher`, `url_home` ainda é o upstream, `BuildKeys.DEDICATED_MODE` não compila (símbolo inexistente). Qualquer um desses três já prova que o teste é sensível.
 
-- [ ] **Step 3: Trocar o `gradle.properties`**
+- [x] **Step 3: Trocar o `gradle.properties`**
 
 Em `ZalithLauncher/gradle.properties`, troque o bloco inicial:
 
@@ -259,7 +259,7 @@ launcher_version_name=1.0.0
 
 > `200100 > 200043` é obrigatório (mesmo `applicationId` da instalação oficial); `1.0.0` porque este é um produto novo e o nome do APK passa a ser `SuperLauncher-1.0.0.apk`.
 
-- [ ] **Step 4: Declarar os BuildKeys dedicados**
+- [x] **Step 4: Declarar os BuildKeys dedicados**
 
 Em `ZalithLauncher/build.gradle.kts`, no bloco `buildKeys { }` (linha 212), **depois** de `string("BUILD_ARCH", projectArch)`, adicione:
 
@@ -273,12 +273,12 @@ Em `ZalithLauncher/build.gradle.kts`, no bloco `buildKeys { }` (linha 212), **de
 
 > O aviso de versão modificada **não** vira BuildKey — ele existe só como string resource (`task 3`), fonte única de verdade. Replicar em dois lugares é como o texto acaba divergindo.
 
-- [ ] **Step 5: Rodar e ver passar**
+- [x] **Step 5: Rodar e ver passar**
 
 Run: `.\gradlew.bat :ZalithLauncher:testDebugUnitTest --tests "*BuildBrandTest" --console=plain`
 Expected: `BUILD SUCCESSFUL` — os 5 testes passam.
 
-- [ ] **Step 6: Commit**
+- [x] **Step 6: Commit**
 
 ```powershell
 git add ZalithLauncher/gradle.properties ZalithLauncher/build.gradle.kts `
@@ -304,7 +304,7 @@ git commit -m "feat(identity): rename build to Super Launcher and add dedicated 
 
 > `HomeCards` é um `object` público e `systemCards()` só **constrói** `SystemCard`s; o lambda `@Composable` só roda na composição. Por isso o teste JVM consegue chamar `systemCards()` sem Android.
 
-- [ ] **Step 1: Escrever o teste falhando**
+- [x] **Step 1: Escrever o teste falhando**
 
 Crie `ZalithLauncher/src/test/java/com/movtery/zalithlauncher/ui/screens/content/home/HomeCardsSystemTest.kt`:
 
@@ -350,12 +350,12 @@ class HomeCardsSystemTest {
 }
 ```
 
-- [ ] **Step 2: Rodar e ver falhar**
+- [x] **Step 2: Rodar e ver falhar**
 
 Run: `.\gradlew.bat :ZalithLauncher:testDebugUnitTest --tests "*HomeCardsSystemTest" --console=plain`
 Expected: `FAILED` — card não registrado e a string não existe no XML.
 
-- [ ] **Step 3: Adicionar a string**
+- [x] **Step 3: Adicionar a string**
 
 Em `ZalithLauncher/src/main/res/values/strings.xml`, logo **após** a linha 87 (`launcher_version_debug_warning_cant_close`) e **antes** de `<!-- Themes -->`:
 
@@ -364,7 +364,7 @@ Em `ZalithLauncher/src/main/res/values/strings.xml`, logo **após** a linha 87 (
     <string name="unofficial_modified_notice" translatable="false">Unofficial Modified Version by Hakkaiz</string>
 ```
 
-- [ ] **Step 4: Registrar o card de sistema**
+- [x] **Step 4: Registrar o card de sistema**
 
 Em `ZalithLauncher/src/main/java/com/movtery/zalithlauncher/ui/screens/content/home/HomeCards.kt`, troque `systemCards()` (linhas 72-76) por:
 
@@ -406,17 +406,17 @@ e adicione o método logo abaixo de `debugWarningCard()` (antes do fechamento do
 
 Nenhum import novo é necessário: `Arrangement`, `Column`, `fillMaxWidth`, `padding`, `MaterialTheme`, `Text`, `stringResource`, `alpha`, `BackgroundCard`, `R` já estão importados no topo do arquivo.
 
-- [ ] **Step 5: Rodar e ver passar**
+- [x] **Step 5: Rodar e ver passar**
 
 Run: `.\gradlew.bat :ZalithLauncher:testDebugUnitTest --tests "*HomeCardsSystemTest" --console=plain`
 Expected: `BUILD SUCCESSFUL`.
 
-- [ ] **Step 6: Rodar a suíte inteira**
+- [x] **Step 6: Rodar a suíte inteira**
 
 Run: `.\gradlew.bat :ZalithLauncher:testDebugUnitTest --console=plain`
 Expected: `BUILD SUCCESSFUL` — nenhum teste existente quebrou com o card novo.
 
-- [ ] **Step 7: Commit**
+- [x] **Step 7: Commit**
 
 ```powershell
 git add ZalithLauncher/src/main/res/values/strings.xml `
@@ -450,7 +450,7 @@ git commit -m "feat(identity): show mandatory modified-version notice on home sc
 
 > `drawable/` e `drawable-nodpi/` são configurações do **mesmo** recurso — por isso os vetores em `drawable/` são apagados em vez de coexistir: senão a resolução fica ambígua.
 
-- [ ] **Step 1: Escrever o teste falhando**
+- [x] **Step 1: Escrever o teste falhando**
 
 Crie `ZalithLauncher/src/test/java/com/movtery/zalithlauncher/res/LauncherIconResourcesTest.kt`:
 
@@ -587,12 +587,12 @@ class LauncherIconResourcesTest {
 }
 ```
 
-- [ ] **Step 2: Rodar e ver falhar**
+- [x] **Step 2: Rodar e ver falhar**
 
 Run: `.\gradlew.bat :ZalithLauncher:testDebugUnitTest --tests "*LauncherIconResourcesTest" --console=plain`
 Expected: `FAILED` — quase todos os testes falham (arquivos não existem ainda).
 
-- [ ] **Step 3: Versionar a arte-fonte**
+- [x] **Step 3: Versionar a arte-fonte**
 
 ```powershell
 New-Item -ItemType Directory -Force -Path docs\assets | Out-Null
@@ -600,7 +600,7 @@ Copy-Item "C:\Users\Administrator\Downloads\21c2fe7752bc783c0327827520086fd2.png
           "docs\assets\dbc-super-icon-1024.png" -Force
 ```
 
-- [ ] **Step 4: Criar o script de geração**
+- [x] **Step 4: Criar o script de geração**
 
 Crie `scripts/generate-launcher-icon.ps1`:
 
@@ -745,7 +745,7 @@ try {
 }
 ```
 
-- [ ] **Step 5: Apagar os vetores antigos**
+- [x] **Step 5: Apagar os vetores antigos**
 
 ```powershell
 Remove-Item ZalithLauncher\src\main\res\drawable\ic_launcher_foreground.xml -Force
@@ -754,12 +754,12 @@ Remove-Item ZalithLauncher\src\main\res\drawable\ic_launcher_monochrome.xml -For
 
 > Apagar **antes** de rodar o script evita o estado ambíguo em que `drawable/` e `drawable-nodpi/` disputam o mesmo nome de recurso.
 
-- [ ] **Step 6: Rodar o script**
+- [x] **Step 6: Rodar o script**
 
 Run: `powershell -ExecutionPolicy Bypass -File scripts\generate-launcher-icon.ps1`
 Expected: as três linhas `OK ...`, com `cor de fundo: #` seguido de 6 dígitos hex.
 
-- [ ] **Step 7: Trocar os small icons das notificações**
+- [x] **Step 7: Trocar os small icons das notificações**
 
 Nos 4 arquivos abaixo, troque `setSmallIcon(R.mipmap.ic_launcher)` por `setSmallIcon(R.drawable.ic_launcher_monochrome)`:
 
@@ -775,12 +775,12 @@ Verificação de que sobrou alguma referência antiga:
 Run: `Select-String -Path "ZalithLauncher\src\main\java\**\*.kt","ZalithLauncher\src\main\java\**\*.java" -Pattern "R\.mipmap\.ic_launcher"`
 Expected: nenhuma ocorrência.
 
-- [ ] **Step 8: Rodar e ver passar**
+- [x] **Step 8: Rodar e ver passar**
 
 Run: `.\gradlew.bat :ZalithLauncher:testDebugUnitTest --tests "*LauncherIconResourcesTest" --console=plain`
 Expected: `BUILD SUCCESSFUL` (7 testes).
 
-- [ ] **Step 9: Commit**
+- [x] **Step 9: Commit**
 
 ```powershell
 git add docs/assets scripts ZalithLauncher/src/main/res ZalithLauncher/src/main/java
@@ -798,17 +798,17 @@ git commit -m "feat(identity): replace launcher icon with DBC Super artwork and 
 - Consumes: tasks 1-4.
 - Produces: `ZalithLauncher/build/outputs/apk/debug/SuperLauncher-Debug-1.0.0-<abi>.apk` e a lista de verificação manual abaixo.
 
-- [ ] **Step 1: Suíte completa**
+- [x] **Step 1: Suíte completa**
 
 Run: `.\gradlew.bat :ZalithLauncher:testDebugUnitTest --console=plain`
 Expected: `BUILD SUCCESSFUL`, `EXIT=0`.
 
-- [ ] **Step 2: Compilar o APK**
+- [x] **Step 2: Compilar o APK**
 
 Run: `.\gradlew.bat :ZalithLauncher:assembleDebug --console=plain`
 Expected: `BUILD SUCCESSFUL` e, em `ZalithLauncher\build\outputs\apk\debug\`, arquivos `SuperLauncher-Debug-1.0.0-*.apk` (o build tem split por ABI → um por arquitetura).
 
-- [ ] **Step 3: Verificar o manifesto do APK**
+- [x] **Step 3: Verificar o manifesto do APK**
 
 Run:
 
@@ -830,7 +830,7 @@ $apk = Get-ChildItem ZalithLauncher\build\outputs\apk\debug\SuperLauncher-Debug-
 
 Expected: `package: name='com.movtery.zalithlauncher.v2'`, `application-label: Super Launcher`, ícone declarado.
 
-- [ ] **Step 4: Verificação manual (aparelho)**
+- [x] **Step 4: Verificação manual (aparelho)**
 
 Com o aparelho conectado (`adb devices` mostra um dispositivo autorizado):
 
@@ -852,7 +852,7 @@ Checklist visual — marque cada item:
 
 Se o ícone estiver cortado, ajuste `$artRatio` em `scripts/generate-launcher-icon.ps1` (0.70 → 0.65) e rode de novo os steps 6 e 2 desta task — o teste `foregroundKeepsSafeZone` precisa ser atualizado junto, porque ele fixa a proporção.
 
-- [ ] **Step 5: Commit final (se algo tiver mudado)**
+- [x] **Step 5: Commit final (se algo tiver mudado)**
 
 ```powershell
 git add -A
