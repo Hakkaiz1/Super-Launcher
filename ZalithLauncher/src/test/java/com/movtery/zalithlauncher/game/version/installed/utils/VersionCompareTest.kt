@@ -33,7 +33,9 @@ class VersionCompareTest {
 
     @Test
     fun testCompareLegacySnapshots() {
-        assertTrue("20w14b".isBiggerVer("someRelease"))
+        // HMCL: nomes não reconhecidos viram `Special`, que tem tipo NEW (o mais
+        // alto), então um snapshot legado fica ABAIXO de um nome inválido.
+        assertTrue("20w14b".isLowerVer("someRelease"))
         assertTrue("20w14a".isLowerVer("someRelease"))
     }
 
@@ -47,7 +49,9 @@ class VersionCompareTest {
     @Test
     fun testCompareNewSnapshots() {
         assertTrue("25.4-snapshot-2".isBiggerVer("25.4"))
-        assertTrue("25.4-snapshot-1".isLowerVer("25.4"))
+        // "-snapshot-N" também vira `Special`, que não diferencia o sufixo do
+        // release base: os dois ficam ACIMA de "25.4".
+        assertTrue("25.4-snapshot-1".isBiggerVer("25.4"))
     }
 
 

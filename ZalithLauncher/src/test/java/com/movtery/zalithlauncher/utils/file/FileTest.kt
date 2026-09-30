@@ -21,6 +21,7 @@ package com.movtery.zalithlauncher.utils.file
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.jackhuang.hmcl.util.DigestUtils
+import org.junit.Assert.assertEquals
 import org.junit.Test
 import java.io.File
 
@@ -28,12 +29,16 @@ class FileTest {
 
     @Test
     fun testCalculateFileSha1() {
-        val file = File("F:\\Download\\geckolib-forge-1.21.8-5.2.2.jar")
-        runBlocking(Dispatchers.IO) {
-            val sha11 = calculateFileSha1(file)
-            println("sha1 1 = $sha11")
-            val sha12 = DigestUtils.digestToString("SHA-1", file.toPath())
-            println("sha1 2 = $sha12")
+        // antes lia um .jar da máquina do autor (F:\Download\...), sem asserção:
+        // falhava em qualquer outra máquina. Agora usa um arquivo temporário.
+        val file = File.createTempFile("filetest", ".jar")
+        try {
+            file.writeBytes(ByteArray(100_000) { (it % 251).toByte() })
+            val sha11 = runBlocking(Dispatchers.IO) { calculateFileSha1(file) }
+            val sha12 = runBlocking(Dispatchers.IO) { DigestUtils.digestToString("SHA-1", file.toPath()) }
+            assertEquals("calculateFileSha1 divergiu do digest de referência", sha12, sha11)
+        } finally {
+            file.delete()
         }
     }
 }

@@ -31,11 +31,20 @@ class MurmurHash2IncrementalTest {
 
     @Test
     fun testTwoWay() {
-        val file = File("F:\\Download\\geckolib-forge-1.21.8-5.2.2.jar")
-        val hash1 = way1(file)
-        println("Way 1 hash = $hash1")
-        val hash2 = way2(file)
-        println("Way 2 hash = $hash2")
+        // antes lia um .jar da máquina do autor (F:\Download\...), sem asserção:
+        // falhava em qualquer outra máquina. Agora usa um arquivo temporário
+        // e compara de verdade os dois caminhos de hash.
+        val dir = createTempDirectory("murmur2-tw way").toFile()
+        try {
+            val file = dir.resolve("sample.jar")
+            file.writeBytes(ByteArray(50_000) { (it * 31 % 256).toByte() })
+
+            val hash1 = way1(file)
+            val hash2 = way2(file)
+            assertEquals("caminho incremental divergiu do ByteArrayOutputStream", hash1, hash2)
+        } finally {
+            dir.deleteRecursively()
+        }
     }
 
     //Old
