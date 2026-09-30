@@ -217,6 +217,11 @@ buildKeys {
     string("URL_HOME", launcherUrl, true)
     string("CURSEFORGE_API", getKeyFromLocal("CURSEFORGE_API_KEY", ".curseforge_api.txt", defaultCurseForgeApiKey), true)
     string("BUILD_ARCH", projectArch)
+    // Build dedicada Super Launcher (spec §2)
+    boolean("DEDICATED_MODE", true)
+    string("DEDICATED_PACK_SLUG", "dbc-super-oficial")
+    string("DEDICATED_SERVER_NAME", "Minecraft Server")
+    string("DEDICATED_SERVER_IP", "dbcsuper.com")
 }
 
 dependencies {
