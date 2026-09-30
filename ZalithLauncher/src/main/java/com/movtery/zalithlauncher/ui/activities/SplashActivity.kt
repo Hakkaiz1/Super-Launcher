@@ -132,7 +132,7 @@ class SplashActivity : BaseAppCompatActivity() {
                 )
             }
         }
-        Jre.entries.forEach { jre ->
+        Jre.entries.filter { it.bundled }.forEach { jre ->
             val task = UnpackJreTask(this@SplashActivity, jre)
             if (!task.isCheckFailed()) {
                 unpackItems.add(

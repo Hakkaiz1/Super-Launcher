@@ -89,11 +89,7 @@ suspend fun runJvmRetryRuntimes(
     )
 
     if (exitCode != 0) {
-        val nextJava: Jre? = when (jre) {
-            Jre.JRE_8 -> Jre.JRE_17
-            Jre.JRE_17 -> Jre.JRE_21
-            else -> null
-        }
+        val nextJava: Jre? = jre.nextRetry()
 
         nextJava?.let { jre ->
             Logger.info(TAG, "Retry with jre ${jre.name}...")

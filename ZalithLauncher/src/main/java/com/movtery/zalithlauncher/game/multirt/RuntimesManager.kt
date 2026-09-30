@@ -108,7 +108,7 @@ object RuntimesManager {
                         versionString = javaVersion,
                         arch = osArch,
                         javaVersion = majorVersion,
-                        isProvidedByLauncher = Jre.entries.any { it.jreName == name },
+                        isProvidedByLauncher = Jre.entries.any { it.bundled && it.jreName == name },
                         isJDK8 = isJDK8(runtimeDir.absolutePath)
                     )
                 } else {

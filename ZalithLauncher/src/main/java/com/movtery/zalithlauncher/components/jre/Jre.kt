@@ -20,9 +20,30 @@ package com.movtery.zalithlauncher.components.jre
 
 import com.movtery.zalithlauncher.R
 
-enum class Jre(val jreName: String, val jrePath: String, val summary: Int, val majorVersion: Int) {
-    JRE_8("Internal-8", "runtimes/jre-8", R.string.unpack_screen_jre8, 8),
+enum class Jre(
+    val jreName: String,
+    val jrePath: String,
+    val summary: Int,
+    val majorVersion: Int,
+    /**
+     * Esta build é travada no pack do DBC Super (Minecraft 1.7.10), que só roda
+     * em Java 8. Os runtimes maiores não são empacotados nem instalados.
+     */
+    val bundled: Boolean = false
+) {
+    JRE_8("Internal-8", "runtimes/jre-8", R.string.unpack_screen_jre8, 8, bundled = true),
     JRE_17("Internal-17", "runtimes/jre-17", R.string.unpack_screen_jre17, 17),
     JRE_21("Internal-21", "runtimes/jre-21", R.string.unpack_screen_jre21, 21),
-    JRE_25("Internal-25", "runtimes/jre-25", R.string.unpack_screen_jre25, 25)
+    JRE_25("Internal-25", "runtimes/jre-25", R.string.unpack_screen_jre25, 25);
+
+    /**
+     * Próximo runtime da escada de repetição quando o jogo fecha com erro.
+     * Só escala pra um runtime que a build empacota — num build sem Java 17/21
+     * a tentativa morreria faltando runtime e esconderia o crash real.
+     */
+    fun nextRetry(): Jre? = when (this) {
+        JRE_8 -> JRE_17
+        JRE_17 -> JRE_21
+        else -> null
+    }?.takeIf { it.bundled }
 }
