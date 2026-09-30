@@ -51,7 +51,7 @@ class BuildBrandTest {
     @Test
     fun homeUrlPointsAtModifiedSource() {
         // GPLv3 §6: a oferta de fonte deve ser da versão modificada
-        assertEquals("https://github.com/Douglas2231/Super-Launcher", prop("url_home"))
+        assertEquals("https://github.com/Hakkaiz1/Super-Launcher", prop("url_home"))
     }
 
     @Test

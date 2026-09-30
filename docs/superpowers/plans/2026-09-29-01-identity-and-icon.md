@@ -17,7 +17,7 @@
 - `launcher_name=SuperLauncher` — **não** pode conter `ZalithLauncher` nem `ZL`.
 - `launcher_app_name=Super Launcher` (nome exibido; vira `manifestPlaceholders["launcher_name"]` → `android:label`).
 - `launcher_short_name=SL`.
-- `url_home=https://github.com/Douglas2231/Super-Launcher` — GPLv3 §6 exige que a oferta de fonte aponte pra versão modificada.
+- `url_home=https://github.com/Hakkaiz1/Super-Launcher` — GPLv3 §6 exige que a oferta de fonte aponte pra versão modificada.
 - `launcher_version_code` deve superar `200043` (senão o Android recusa a atualização por cima da instalação oficial).
 - Aviso obrigatório, texto exato: `Unofficial Modified Version by Hakkaiz` — em inglês, `translatable="false"`.
 - `DEDICATED_MODE=true`, `DEDICATED_PACK_SLUG=dbc-super-oficial`, `DEDICATED_SERVER_NAME=Minecraft Server`, `DEDICATED_SERVER_IP=dbcsuper.com`.
@@ -210,7 +210,7 @@ class BuildBrandTest {
     @Test
     fun homeUrlPointsAtModifiedSource() {
         // GPLv3 §6: a oferta de fonte deve ser da versão modificada
-        assertEquals("https://github.com/Douglas2231/Super-Launcher", prop("url_home"))
+        assertEquals("https://github.com/Hakkaiz1/Super-Launcher", prop("url_home"))
     }
 
     @Test
@@ -246,7 +246,7 @@ Em `ZalithLauncher/gradle.properties`, troque o bloco inicial:
 launcher_name=SuperLauncher
 launcher_app_name=Super Launcher
 launcher_short_name=SL
-url_home=https://github.com/Douglas2231/Super-Launcher
+url_home=https://github.com/Hakkaiz1/Super-Launcher
 ```
 
 e o bloco de versão:
@@ -846,7 +846,7 @@ Checklist visual — marque cada item:
 - [ ] Ícone mostra a arte DBC SUPER, com **orelhas e texto "SUPER" inteiros** (não cortados pela máscara circular/squircle)
 - [ ] Fundo do ícone é o tom escuro da arte, sem sobra do laranja `#FFE08F` antigo
 - [ ] Tela inicial exibe o card **"Unofficial Modified Version by Hakkaiz"**
-- [ ] Em *Configurações → Sobre*, o nome exibido é Super Launcher e o link aponta pra `github.com/Douglas2231/Super-Launcher`
+- [ ] Em *Configurações → Sobre*, o nome exibido é Super Launcher e o link aponta pra `github.com/Hakkaiz1/Super-Launcher`
 - [ ] Dispare uma notificação (ex.: iniciar uma tarefa) e confira que o ícone é a **silhueta branca**, não uma mancha colorida
 - [ ] Tela de abertura (splash) mostra a nova arte
 
