@@ -58,7 +58,7 @@ class TaskKeepAliveService : Service() {
             .setContentTitle(getString(R.string.notification_task_service_running))
             .setOngoing(true)
             .setPriority(NotificationCompat.PRIORITY_LOW)
-            .setSmallIcon(R.mipmap.ic_launcher)
+            .setSmallIcon(R.drawable.ic_launcher_monochrome)
             .build()
 
         try {

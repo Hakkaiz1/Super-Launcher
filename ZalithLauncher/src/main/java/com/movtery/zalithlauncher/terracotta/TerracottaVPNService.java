@@ -208,7 +208,7 @@ public class TerracottaVPNService extends VpnService {
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE
         );
 
-        builder.setSmallIcon(R.mipmap.ic_launcher)
+        builder.setSmallIcon(R.drawable.ic_launcher_monochrome)
                 .setContentTitle(title)
                 .setContentText(contentText)
                 .setWhen(System.currentTimeMillis())
