@@ -18,8 +18,10 @@
 
 package com.movtery.zalithlauncher.game.download.modpack.technic
 
+import com.movtery.zalithlauncher.game.dedicated.PackManifest
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull
 import org.junit.Assert.assertTrue
 import org.junit.Assert.fail
@@ -83,6 +85,61 @@ class TechnicPackInstallerTest {
             fail("deveria lançar InsufficientSpaceException")
         } catch (expected: InsufficientSpaceException) {
             assertTrue(expected.message!!.contains("100"))
+        }
+    }
+
+    @Test
+    fun `first install copies player data but never bin`() = runBlocking<Unit> {
+        val root = Files.createTempDirectory("overlay-first").toFile()
+        try {
+            val staging = File(root, "staging")
+            val versionDir = File(root, "version")
+            listOf("bin/minecraft.jar", "mods/pack.jar", "servers.dat", "options.txt", "saves/packworld/level.dat")
+                .forEach { path ->
+                    File(staging, path).let { it.parentFile?.mkdirs(); it.writeText("pack") }
+                }
+            val progress = mutableListOf<Float>()
+
+            overlayPack(staging, versionDir, oldManifest = null) { progress.add(it) }
+
+            assertFalse(File(versionDir, "bin/minecraft.jar").exists())
+            assertEquals("pack", File(versionDir, "mods/pack.jar").readText())
+            assertEquals("pack", File(versionDir, "servers.dat").readText())
+            assertEquals("pack", File(versionDir, "options.txt").readText())
+            assertEquals("pack", File(versionDir, "saves/packworld/level.dat").readText())
+            assertEquals(1f, progress.last(), 0.0001f)
+        } finally {
+            root.deleteRecursively()
+        }
+    }
+
+    @Test
+    fun `update never overwrites player data and removes orphan mods`() = runBlocking<Unit> {
+        val root = Files.createTempDirectory("overlay-update").toFile()
+        try {
+            val staging = File(root, "staging")
+            val versionDir = File(root, "version")
+            // estado do jogador após uma instalação anterior
+            File(versionDir, "mods/old.jar").let { it.parentFile?.mkdirs(); it.writeText("old") }
+            File(versionDir, "mods/new.jar").let { it.parentFile?.mkdirs(); it.writeText("stale") }
+            File(versionDir, "options.txt").let { it.parentFile?.mkdirs(); it.writeText("player-options") }
+            File(versionDir, "servers.dat").let { it.parentFile?.mkdirs(); it.writeText("player-servers") }
+            File(versionDir, "saves/mysave/level.dat").let { it.parentFile?.mkdirs(); it.writeText("player-save") }
+            // zip novo: mods/new.jar atualizado + protegidos diferentes (que NÃO devem entrar)
+            File(staging, "mods/new.jar").let { it.parentFile?.mkdirs(); it.writeText("pack-new") }
+            File(staging, "options.txt").let { it.parentFile?.mkdirs(); it.writeText("pack-options") }
+            File(staging, "servers.dat").let { it.parentFile?.mkdirs(); it.writeText("pack-servers") }
+
+            val oldManifest = PackManifest("dbc-super-oficial", "10.7", listOf("mods/old.jar", "mods/new.jar"))
+            overlayPack(staging, versionDir, oldManifest) { }
+
+            assertFalse("órfão do manifesto antigo deveria sumir", File(versionDir, "mods/old.jar").exists())
+            assertEquals("pack-new", File(versionDir, "mods/new.jar").readText())
+            assertEquals("player-options", File(versionDir, "options.txt").readText())
+            assertEquals("player-servers", File(versionDir, "servers.dat").readText())
+            assertEquals("player-save", File(versionDir, "saves/mysave/level.dat").readText())
+        } finally {
+            root.deleteRecursively()
         }
     }
 }

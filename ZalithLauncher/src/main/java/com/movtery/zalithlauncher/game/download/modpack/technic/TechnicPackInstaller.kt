@@ -98,6 +98,47 @@ internal suspend fun extractPack(zipFile: File, stagingDir: File) {
 }
 
 /**
+ * Etapa 6 (spec §5.2) + regras de update (§5.3): copia o staging para
+ * `versions/<slug>/` sem `bin/`; no update apaga os órfãos do manifesto antigo e
+ * **nunca** sobrescreve `saves/`, `options.txt` nem `servers.dat`; na primeira
+ * instalação os protegidos do pack são copiados normalmente.
+ */
+internal suspend fun overlayPack(
+    stagingDir: File,
+    versionDir: File,
+    oldManifest: PackManifest?,
+    onProgress: (Float) -> Unit
+) {
+    val copyable = stagingDir.walkTopDown()
+        .filter { it.isFile }
+        .map { it.relativeTo(stagingDir).invariantSeparatorsPath }
+        .filter { path ->
+            !path.startsWith("bin/") &&
+                (oldManifest == null || !PackManifest.isProtected(path))
+        }
+        .sorted()
+        .toList()
+
+    if (oldManifest != null) {
+        PackManifest.orphans(oldManifest, PackManifest.packFiles(stagingDir)).forEach { rel ->
+            if (!PackManifest.isProtected(rel)) {
+                File(versionDir, rel).takeIf { it.exists() }?.delete()
+            }
+        }
+    }
+
+    versionDir.mkdirs()
+    copyable.forEachIndexed { index, rel ->
+        val source = File(stagingDir, rel)
+        val target = File(versionDir, rel)
+        target.parentFile?.mkdirs()
+        source.copyTo(target, overwrite = true)
+        onProgress((index + 1).toFloat() / copyable.size)
+    }
+    if (copyable.isEmpty()) onProgress(1f)
+}
+
+/**
  * Instala/atualiza o pack dedicado (8 etapas da spec §5.2).
  * O `Context` entra por `install()` — a construção precisa ficar testável em JVM.
  */
@@ -184,6 +225,17 @@ class TechnicPackInstaller(private val scope: CoroutineScope) {
             // (mesmo padrão do ModPackInstaller.kt:241-280); overlay/seed/select chegam na Task 8.
             taskExecutor.addPhases(installer.getTaskPhase(createIsolation = true))
             task.updateProgress(1f)
+        }
+    }
+
+    /** Etapa 6 como fase do fluxo. */
+    internal fun overlayPhase(
+        stagingDir: File,
+        versionDir: File,
+        oldManifest: PackManifest?
+    ): TaskFlowExecutor.TaskPhase = buildPhase {
+        addTask(id = "Dedicated.Overlay", title = androidText(R.string.dedicated_task_overlay)) { task ->
+            overlayPack(stagingDir, versionDir, oldManifest) { pct -> task.updateProgress(pct) }
         }
     }
 }
