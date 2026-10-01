@@ -103,6 +103,7 @@ import com.movtery.zalithlauncher.ui.screens.content.VersionSettingsScreen
 import com.movtery.zalithlauncher.ui.screens.content.VersionsManageScreen
 import com.movtery.zalithlauncher.ui.screens.content.WebViewScreen
 import com.movtery.zalithlauncher.ui.screens.content.assetinfo.AssetInfoScreen
+import com.movtery.zalithlauncher.ui.screens.content.dedicated.DedicatedScreen
 import com.movtery.zalithlauncher.ui.screens.content.navigateToDownload
 import com.movtery.zalithlauncher.ui.screens.navigateTo
 import com.movtery.zalithlauncher.ui.screens.onBack
@@ -403,32 +404,38 @@ private fun <E: TitledNavKey> TopBar(
                     }
                 }
 
-                IconButton(
-                    onClick = openFileManager
-                ) {
-                    Icon(
-                        painter = painterResource(R.drawable.ic_folder_filled),
-                        contentDescription = null
+                if (!BuildKeys.DEDICATED_MODE) {
+                    IconButton(
+                        onClick = openFileManager
+                    ) {
+                        Icon(
+                            painter = painterResource(R.drawable.ic_folder_filled),
+                            contentDescription = null
+                        )
+                    }
+                }
+
+                if (!BuildKeys.DEDICATED_MODE) {
+                    TopBarRailItem(
+                        selected = inMultiplayerScreen,
+                        painter = painterResource(R.drawable.ic_group_filled),
+                        text = stringResource(R.string.terracotta),
+                        onClick = {
+                            if (!inMultiplayerScreen) toMultiplayerScreen()
+                        },
                     )
                 }
 
-                TopBarRailItem(
-                    selected = inMultiplayerScreen,
-                    painter = painterResource(R.drawable.ic_group_filled),
-                    text = stringResource(R.string.terracotta),
-                    onClick = {
-                        if (!inMultiplayerScreen) toMultiplayerScreen()
-                    },
-                )
-
-                TopBarRailItem(
-                    selected = inDownloadScreen,
-                    painter = painterResource(R.drawable.ic_download_2_filled),
-                    text = stringResource(R.string.generic_download),
-                    onClick = {
-                        if (!inDownloadScreen) toDownloadScreen()
-                    },
-                )
+                if (!BuildKeys.DEDICATED_MODE) {
+                    TopBarRailItem(
+                        selected = inDownloadScreen,
+                        painter = painterResource(R.drawable.ic_download_2_filled),
+                        text = stringResource(R.string.generic_download),
+                        onClick = {
+                            if (!inDownloadScreen) toDownloadScreen()
+                        },
+                    )
+                }
 
                 TopBarRailItem(
                     selected = inSettingsScreen,
@@ -521,21 +528,29 @@ private fun NavigationUI(
             popTransitionSpec = rememberTransitionSpec(),
             entryProvider = entryProvider {
                 entry<NormalNavKey.LauncherMain> {
-                    LauncherScreen(
-                        backStackViewModel = screenBackStackModel,
-                        navigateToVersions = navigateToVersions,
-                        onLaunchGame = { version ->
-                            eventViewModel.sendEvent(
-                                EventViewModel.Event.Launch.Game(version)
-                            )
-                        },
-                        onOpenLink = {
-                            eventViewModel.sendEvent(EventViewModel.Event.OpenLink(it))
-                        },
-                        startGuideOnce = { keys ->
-                            eventViewModel.sendStartGuideOnce(keys)
-                        }
-                    )
+                    if (BuildKeys.DEDICATED_MODE) {
+                        DedicatedScreen(
+                            onLaunchGame = {
+                                eventViewModel.sendEvent(EventViewModel.Event.Launch.Game(null))
+                            }
+                        )
+                    } else {
+                        LauncherScreen(
+                            backStackViewModel = screenBackStackModel,
+                            navigateToVersions = navigateToVersions,
+                            onLaunchGame = { version ->
+                                eventViewModel.sendEvent(
+                                    EventViewModel.Event.Launch.Game(version)
+                                )
+                            },
+                            onOpenLink = {
+                                eventViewModel.sendEvent(EventViewModel.Event.OpenLink(it))
+                            },
+                            startGuideOnce = { keys ->
+                                eventViewModel.sendStartGuideOnce(keys)
+                            }
+                        )
+                    }
                 }
                 entry<NestedNavKey.Settings> { key ->
                     SettingsScreen(

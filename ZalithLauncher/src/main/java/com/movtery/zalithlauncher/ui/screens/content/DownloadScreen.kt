@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.ui.NavDisplay
+import com.movtery.zalithlauncher.BuildKeys
 import com.movtery.zalithlauncher.R
 import com.movtery.zalithlauncher.game.download.assets.favorites.FavoriteProjectsRepository
 import com.movtery.zalithlauncher.game.download.assets.platform.Platform
@@ -81,6 +82,9 @@ import com.movtery.zalithlauncher.viewmodel.ScreenBackStackViewModel
  * 导航至DownloadScreen
  */
 fun ScreenBackStackViewModel.navigateToDownload(targetScreen: TitledNavKey? = null) {
+    // §6: modo dedicado — funil de downloads vira no-op (escondida E guardada)
+    if (BuildKeys.DEDICATED_MODE) return
+
     downloadScreen.clearWith(targetScreen ?: downloadGameScreen)
     mainScreen.removeAndNavigateTo(
         removes = clearBeforeNavKeys,

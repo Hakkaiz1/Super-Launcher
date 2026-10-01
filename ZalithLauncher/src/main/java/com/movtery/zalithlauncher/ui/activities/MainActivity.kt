@@ -39,6 +39,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.movtery.guide.GuideHost
+import com.movtery.zalithlauncher.BuildKeys
 import com.movtery.zalithlauncher.R
 import com.movtery.zalithlauncher.context.COPY_LABEL_LINK
 import com.movtery.zalithlauncher.coroutine.Task
@@ -348,10 +349,12 @@ class MainActivity : BaseAppCompatActivity() {
                             )
                         },
                         toVersionManageScreen = {
-                            screenBackStackModel.mainScreen.removeAndNavigateTo(
-                                remove = NestedNavKey.VersionSettings::class,
-                                screenKey = NormalNavKey.VersionsManager
-                            )
+                            if (!BuildKeys.DEDICATED_MODE) {
+                                screenBackStackModel.mainScreen.removeAndNavigateTo(
+                                    remove = NestedNavKey.VersionSettings::class,
+                                    screenKey = NormalNavKey.VersionsManager
+                                )
+                            }
                         },
                         navigateToWeb = { url ->
                             screenBackStackModel.mainScreen.backStack.navigateToWeb(url)

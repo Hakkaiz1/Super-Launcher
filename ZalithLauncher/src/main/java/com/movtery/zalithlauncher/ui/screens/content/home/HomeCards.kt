@@ -66,7 +66,8 @@ object HomeCards {
     fun versionCardType(): CardType = versionCardType
 
     /** 用户卡片类型注册表 */
-    val userCardTypes: List<CardType> = listOf(versionCardType)
+    val userCardTypes: List<CardType> =
+        if (BuildKeys.DEDICATED_MODE) emptyList() else listOf(versionCardType)
 
     /** 系统卡片（不可变更），由启动器自行提供并绘制在网格之外 */
     fun systemCards(): List<SystemCard> = buildList {

@@ -64,6 +64,7 @@ import coil3.gif.GifDecoder
 import coil3.request.ImageRequest
 import coil3.request.allowHardware
 import coil3.request.crossfade
+import com.movtery.zalithlauncher.BuildKeys
 import com.movtery.zalithlauncher.R
 import com.movtery.zalithlauncher.coroutine.TaskSystem
 import com.movtery.zalithlauncher.game.account.Account
@@ -205,7 +206,8 @@ fun LaunchGameOperation(
         is LaunchGameOperation.NoVersion -> {
             LaunchedEffect(Unit) {
                 eventViewModel.sendToast(androidText(R.string.game_launch_no_version))
-                toVersionManageScreen()
+                // §6: no modo dedicado não escapa para o gerenciador de versões
+                if (!BuildKeys.DEDICATED_MODE) toVersionManageScreen()
                 launchGameViewModel.updateOperation(LaunchGameOperation.None)
             }
         }
