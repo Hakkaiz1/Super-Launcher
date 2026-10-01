@@ -19,6 +19,8 @@
 package com.movtery.zalithlauncher.game.download.modpack.technic
 
 import com.movtery.zalithlauncher.game.dedicated.PackManifest
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
@@ -86,6 +88,17 @@ class TechnicPackInstallerTest {
         } catch (expected: InsufficientSpaceException) {
             assertTrue(expected.message!!.contains("100"))
         }
+    }
+
+    @Test
+    fun `pipeline starts with download then extract and base phases`() {
+        val installer = TechnicPackInstaller(CoroutineScope(Dispatchers.Unconfined))
+
+        val phases = installer.buildPhases()
+
+        assertEquals(2, phases.size)
+        assertEquals(3, phases[0].tasks.size)   // ClearTemp + ResolvePack + Download
+        assertEquals(3, phases[1].tasks.size)   // Extract + ResolveVersion + InstallBase
     }
 
     @Test

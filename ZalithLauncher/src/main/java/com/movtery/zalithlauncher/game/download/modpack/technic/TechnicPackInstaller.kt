@@ -26,11 +26,14 @@ import com.movtery.zalithlauncher.coroutine.TaskLogOutput
 import com.movtery.zalithlauncher.coroutine.addTask
 import com.movtery.zalithlauncher.coroutine.buildPhase
 import com.movtery.zalithlauncher.game.addons.modloader.forgelike.forge.ForgeVersions
+import com.movtery.zalithlauncher.game.control.ControlManager
 import com.movtery.zalithlauncher.game.download.engine.DownloadEngine
 import com.movtery.zalithlauncher.game.download.engine.DownloadRequest
 import com.movtery.zalithlauncher.game.download.game.GameDownloadInfo
 import com.movtery.zalithlauncher.game.download.game.GameInstaller
+import com.movtery.zalithlauncher.game.dedicated.DedicatedSeeder
 import com.movtery.zalithlauncher.game.dedicated.PackManifest
+import com.movtery.zalithlauncher.game.path.getVersionsHome
 import com.movtery.zalithlauncher.game.version.installed.VersionsManager
 import com.movtery.zalithlauncher.path.DOWNLOAD_OKHTTP_CLIENT
 import com.movtery.zalithlauncher.path.PathManager
@@ -221,9 +224,22 @@ class TechnicPackInstaller(private val scope: CoroutineScope) {
                 logOutputHolder = _logOutput
             )
             gameInstaller = installer
-            // addPhases dinâmico: as fases do GameInstaller entram no fluxo em tempo de execução
-            // (mesmo padrão do ModPackInstaller.kt:241-280); overlay/seed/select chegam na Task 8.
-            taskExecutor.addPhases(installer.getTaskPhase(createIsolation = true))
+            // Fases do GameInstaller + as nossas 6-8, anexadas em tempo de execução
+            // (mesmo padrão do ModPackInstaller.kt:241-280).
+            val oldManifest = PackManifest.read(versionDir())
+            taskExecutor.addPhases(
+                installer.getTaskPhase(createIsolation = true) + listOf(
+                    overlayPhase(stagingDirectory(), versionDir(), oldManifest),
+                    seedPhase(
+                        context = requireNotNull(appContext) { "install() was not called yet" },
+                        stagingDir = stagingDirectory(),
+                        versionDir = versionDir(),
+                        // primeira instalação aplica os defaults; update preserva o version.config
+                        applyDefaults = oldManifest == null
+                    ),
+                    selectPhase()
+                )
+            )
             task.updateProgress(1f)
         }
     }
@@ -237,5 +253,67 @@ class TechnicPackInstaller(private val scope: CoroutineScope) {
         addTask(id = "Dedicated.Overlay", title = androidText(R.string.dedicated_task_overlay)) { task ->
             overlayPack(stagingDir, versionDir, oldManifest) { pct -> task.updateProgress(pct) }
         }
+    }
+
+    /** `versions/<slug>` — alvo do overlay e do seed (isolation ativa). */
+    private fun versionDir(): File = File(getVersionsHome(), BuildKeys.DEDICATED_PACK_SLUG)
+
+    /** Etapas 7 (§5.2 + §7): layout, version.config, servidor — e o manifesto POR ÚLTIMO. */
+    internal fun seedPhase(
+        context: Context,
+        stagingDir: File,
+        versionDir: File,
+        applyDefaults: Boolean
+    ): TaskFlowExecutor.TaskPhase = buildPhase {
+        addTask(id = "Dedicated.Seed", title = androidText(R.string.dedicated_task_seed)) { task ->
+            val controlFile = ControlManager.ensureDefaultLayout(context)
+            DedicatedSeeder.ensureVersionConfig(versionDir, controlFile, applyDefaults)
+            DedicatedSeeder.ensureServer(versionDir)
+            PackManifest.write(
+                versionDir,
+                PackManifest(
+                    slug = BuildKeys.DEDICATED_PACK_SLUG,
+                    packVersion = apiIdentity,
+                    files = PackManifest.packFiles(stagingDir)
+                )
+            )
+            task.updateProgress(1f)
+        }
+    }
+
+    /** Etapa 8 (§5.2): seleciona a versão instalada como atual. */
+    internal fun selectPhase(): TaskFlowExecutor.TaskPhase = buildPhase {
+        addTask(id = "Dedicated.Select", title = androidText(R.string.dedicated_task_select)) { task ->
+            VersionsManager.saveCurrentVersion(BuildKeys.DEDICATED_PACK_SLUG)
+            task.updateProgress(1f)
+        }
+    }
+
+    /** Etapas 1-5 estáticas; 6-8 entram dinamicamente depois da base (InstallBase). */
+    internal fun buildPhases(): List<TaskFlowExecutor.TaskPhase> = listOf(
+        downloadPhase(),
+        extractBasePhase()
+    )
+
+    /** Pipeline completo (spec §5.2). Erros caem em onError; cancelamento em onCancel. */
+    fun install(
+        context: Context,
+        onInstalled: () -> Unit,
+        onCancel: () -> Unit,
+        onError: (Throwable) -> Unit
+    ) {
+        if (taskExecutor.isRunning()) return
+        appContext = context.applicationContext
+        taskExecutor.executePhasesAsync(
+            onStart = { taskExecutor.addPhases(buildPhases()) },
+            onComplete = { onInstalled() },
+            onCancel = { onCancel() },
+            onError = { e -> onError(e) }
+        )
+    }
+
+    fun cancelInstall() {
+        taskExecutor.cancel()
+        gameInstaller?.cancelInstall(clearTarget = false)
     }
 }
