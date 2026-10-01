@@ -284,7 +284,14 @@ class TechnicPackInstaller(private val scope: CoroutineScope) {
     /** Etapa 8 (§5.2): seleciona a versão instalada como atual. */
     internal fun selectPhase(): TaskFlowExecutor.TaskPhase = buildPhase {
         addTask(id = "Dedicated.Select", title = androidText(R.string.dedicated_task_select)) { task ->
-            VersionsManager.saveCurrentVersion(BuildKeys.DEDICATED_PACK_SLUG)
+            // O refresh ressaneia o disco (a versão acabou de ser criada) e grava
+            // o nome como atual; saveCurrentVersion sozinho resolveria a partir da
+            // lista em memória, ainda desatualizada, e a versão atual ficaria nula.
+            VersionsManager.refresh(
+                "[Dedicated] TechnicPackInstaller.selectPhase",
+                BuildKeys.DEDICATED_PACK_SLUG
+            )
+            VersionsManager.waitForRefresh()
             task.updateProgress(1f)
         }
     }
