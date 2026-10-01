@@ -135,6 +135,7 @@ object DedicatedPackState {
     private var installer: TechnicPackInstaller? = null
     private var appContext: Context? = null
     private var collectorJobs: List<Job> = emptyList()
+    private var checkJob: Job? = null
 
     private val _tasks = MutableStateFlow<List<TitledTask>>(emptyList())
     val tasks: StateFlow<List<TitledTask>> = _tasks.asStateFlow()
@@ -148,9 +149,12 @@ object DedicatedPackState {
      * Chamado pela MainActivity na abertura e pelo botão "Tentar de novo".
      */
     fun launchCheck(context: Context) {
+        // Toques rápidos não iniciam checks concorrentes (o estado Checking também é o
+        // inicial — só o job indica "check em andamento")
+        if (checkJob?.isActive == true) return
         appContext = context.applicationContext
         dispatch(DedicatedEvent.CheckStarted)
-        scope.launch { check(context.applicationContext) }
+        checkJob = scope.launch { check(context.applicationContext) }
     }
 
     internal suspend fun check(context: Context) {
@@ -201,9 +205,15 @@ object DedicatedPackState {
         )
         inst.install(
             context = context.applicationContext,
-            onInstalled = { dispatch(DedicatedEvent.InstallSucceeded) },
+            onInstalled = {
+                _tasks.value = emptyList()
+                _logOutput.value = null
+                dispatch(DedicatedEvent.InstallSucceeded)
+            },
             onCancel = { appContext?.let { c -> launchCheck(c) } },
             onError = { e ->
+                _tasks.value = emptyList()
+                _logOutput.value = null
                 if (classifyError(e) == ErrorKind.OFFLINE) dispatch(DedicatedEvent.CheckOffline)
                 else dispatch(DedicatedEvent.InstallFailed(errorMessage(e)))
             }
