@@ -361,7 +361,10 @@ object AllSettings : SettingsRegistry() {
      */
     val launcherColorTheme = enumSetting(
         "launcherColorTheme",
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) ColorThemeType.DYNAMIC
+        // O modo dedicado nasce na paleta de marca; os demais builds mantêm o
+        // Dynamic do Android 12+ (ou Embermire abaixo disso).
+        if (BuildKeys.DEDICATED_MODE) ColorThemeType.DBC_SUPER
+        else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) ColorThemeType.DYNAMIC
         else ColorThemeType.EMBERMIRE
     )
 

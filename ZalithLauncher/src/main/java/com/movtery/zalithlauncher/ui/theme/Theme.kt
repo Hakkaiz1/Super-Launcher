@@ -121,6 +121,87 @@ private val embermireDark = darkColorScheme(
     surfaceContainerHighest = surfaceContainerHighestDark.embermire,
 )
 
+/**
+ * DBC Super（品牌配色，源自 DBC Super 官方美术）
+ * 深紫近黑为底，紫色为主色，品红为辅色，金橙为点缀色。
+ */
+internal val dbcSuperLight = lightColorScheme(
+    primary = primaryLight.dbcSuper,
+    onPrimary = onPrimaryLight.dbcSuper,
+    primaryContainer = primaryContainerLight.dbcSuper,
+    onPrimaryContainer = onPrimaryContainerLight.dbcSuper,
+    secondary = secondaryLight.dbcSuper,
+    onSecondary = onSecondaryLight.dbcSuper,
+    secondaryContainer = secondaryContainerLight.dbcSuper,
+    onSecondaryContainer = onSecondaryContainerLight.dbcSuper,
+    tertiary = tertiaryLight.dbcSuper,
+    onTertiary = onTertiaryLight.dbcSuper,
+    tertiaryContainer = tertiaryContainerLight.dbcSuper,
+    onTertiaryContainer = onTertiaryContainerLight.dbcSuper,
+    error = errorLight.dbcSuper,
+    onError = onErrorLight.dbcSuper,
+    errorContainer = errorContainerLight.dbcSuper,
+    onErrorContainer = onErrorContainerLight.dbcSuper,
+    background = backgroundLight.dbcSuper,
+    onBackground = onBackgroundLight.dbcSuper,
+    surface = surfaceLight.dbcSuper,
+    onSurface = onSurfaceLight.dbcSuper,
+    surfaceVariant = surfaceVariantLight.dbcSuper,
+    onSurfaceVariant = onSurfaceVariantLight.dbcSuper,
+    outline = outlineLight.dbcSuper,
+    outlineVariant = outlineVariantLight.dbcSuper,
+    scrim = scrimLight.dbcSuper,
+    inverseSurface = inverseSurfaceLight.dbcSuper,
+    inverseOnSurface = inverseOnSurfaceLight.dbcSuper,
+    inversePrimary = inversePrimaryLight.dbcSuper,
+    surfaceDim = surfaceDimLight.dbcSuper,
+    surfaceBright = surfaceBrightLight.dbcSuper,
+    surfaceContainerLowest = surfaceContainerLowestLight.dbcSuper,
+    surfaceContainerLow = surfaceContainerLowLight.dbcSuper,
+    surfaceContainer = surfaceContainerLight.dbcSuper,
+    surfaceContainerHigh = surfaceContainerHighLight.dbcSuper,
+    surfaceContainerHighest = surfaceContainerHighestLight.dbcSuper,
+)
+
+/** DBC Super（品牌配色）深色变体：深紫近黑的底色上用紫/品红/金三色。 */
+internal val dbcSuperDark = darkColorScheme(
+    primary = primaryDark.dbcSuper,
+    onPrimary = onPrimaryDark.dbcSuper,
+    primaryContainer = primaryContainerDark.dbcSuper,
+    onPrimaryContainer = onPrimaryContainerDark.dbcSuper,
+    secondary = secondaryDark.dbcSuper,
+    onSecondary = onSecondaryDark.dbcSuper,
+    secondaryContainer = secondaryContainerDark.dbcSuper,
+    onSecondaryContainer = onSecondaryContainerDark.dbcSuper,
+    tertiary = tertiaryDark.dbcSuper,
+    onTertiary = onTertiaryDark.dbcSuper,
+    tertiaryContainer = tertiaryContainerDark.dbcSuper,
+    onTertiaryContainer = onTertiaryContainerDark.dbcSuper,
+    error = errorDark.dbcSuper,
+    onError = onErrorDark.dbcSuper,
+    errorContainer = errorContainerDark.dbcSuper,
+    onErrorContainer = onErrorContainerDark.dbcSuper,
+    background = backgroundDark.dbcSuper,
+    onBackground = onBackgroundDark.dbcSuper,
+    surface = surfaceDark.dbcSuper,
+    onSurface = onSurfaceDark.dbcSuper,
+    surfaceVariant = surfaceVariantDark.dbcSuper,
+    onSurfaceVariant = onSurfaceVariantDark.dbcSuper,
+    outline = outlineDark.dbcSuper,
+    outlineVariant = outlineVariantDark.dbcSuper,
+    scrim = scrimDark.dbcSuper,
+    inverseSurface = inverseSurfaceDark.dbcSuper,
+    inverseOnSurface = inverseOnSurfaceDark.dbcSuper,
+    inversePrimary = inversePrimaryDark.dbcSuper,
+    surfaceDim = surfaceDimDark.dbcSuper,
+    surfaceBright = surfaceBrightDark.dbcSuper,
+    surfaceContainerLowest = surfaceContainerLowestDark.dbcSuper,
+    surfaceContainerLow = surfaceContainerLowDark.dbcSuper,
+    surfaceContainer = surfaceContainerDark.dbcSuper,
+    surfaceContainerHigh = surfaceContainerHighDark.dbcSuper,
+    surfaceContainerHighest = surfaceContainerHighestDark.dbcSuper,
+)
+
 private val velvetRoseLight = lightColorScheme(
     primary = primaryLight.velvetRose,
     onPrimary = onPrimaryLight.velvetRose,
@@ -629,6 +710,7 @@ fun ZalithLauncherTheme(
                 ColorThemeType.VERDANTFIELD -> verdantFieldDark
                 ColorThemeType.URBAN_ASH -> urbanAshDark
                 ColorThemeType.VERDANT_DAWN -> verdantDawnDark
+                ColorThemeType.DBC_SUPER -> dbcSuperDark
                 ColorThemeType.CUSTOM -> customDark(
                     color = customColor,
                     style = customPaletteStyle
@@ -644,6 +726,7 @@ fun ZalithLauncherTheme(
                 ColorThemeType.VERDANTFIELD -> verdantFieldLight
                 ColorThemeType.URBAN_ASH -> urbanAshLight
                 ColorThemeType.VERDANT_DAWN -> verdantDawnLight
+                ColorThemeType.DBC_SUPER -> dbcSuperLight
                 ColorThemeType.CUSTOM -> customLight(
                     color = customColor,
                     style = customPaletteStyle

@@ -27,7 +27,8 @@ data class ColorTheme(
     val glacier: Color,
     val verdantField: Color,
     val urbanAsh: Color,
-    val verdantDawn: Color
+    val verdantDawn: Color,
+    val dbcSuper: Color
 )
 
 enum class ColorThemeType {
@@ -39,5 +40,6 @@ enum class ColorThemeType {
     VERDANTFIELD,
     URBAN_ASH,
     VERDANT_DAWN,
+    DBC_SUPER,
     CUSTOM
 }
