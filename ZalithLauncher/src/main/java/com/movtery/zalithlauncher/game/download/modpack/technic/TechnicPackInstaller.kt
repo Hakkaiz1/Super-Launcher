@@ -65,7 +65,7 @@ internal fun progressOf(downloaded: Long, total: Long): Float =
 
 /** Tamanho total via HEAD — o engine só reporta bytes incrementais. */
 internal fun headContentLength(url: String): Long = runCatching {
-    DOWNLOAD_OKHTTP_CLIENT.newCall(createRequestBuilder(url).head().build()).execute().use { resp ->
+    DOWNLOAD_OKHTTP_CLIENT.newCall(createRequestBuilder(url).header("User-Agent", TechnicApi.BROWSER_USER_AGENT).head().build()).execute().use { resp ->
         if (resp.isSuccessful) resp.body.contentLength() else -1L
     }
 }.getOrDefault(-1L)
