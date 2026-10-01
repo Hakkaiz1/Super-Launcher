@@ -45,6 +45,7 @@ import java.io.File
 import java.io.InputStream
 
 private const val TAG = "ControlManager"
+private const val DEFAULT_LAYOUT_FILE_NAME = "default_layout.json"
 
 /**
  * 控制布局管理者
@@ -159,6 +160,27 @@ object ControlManager {
         } catch (e: Exception) {
             Logger.warning(TAG, "Failed to unpack default control layout", e)
         }
+    }
+
+    /**
+     * Spec §7.2: semeia o layout padrão apenas se o arquivo ainda não existir —
+     * não depende do estado da pasta como o `checkDefaultAndRefresh`.
+     * Devolve o nome do arquivo para `versionConfig.control`.
+     */
+    suspend fun ensureDefaultLayout(context: Context): String = withContext(Dispatchers.IO) {
+        ensureLayoutFile(PathManager.DIR_CONTROL_LAYOUTS) { output ->
+            context.copyAssetFile(fileName = DEFAULT_LAYOUT_FILE_NAME, output = output, overwrite = false)
+        }.name
+    }
+
+    /** Seam testável: copia somente quando o alvo ainda não existe. */
+    internal suspend fun ensureLayoutFile(dir: File, copyIfMissing: suspend (File) -> Unit): File {
+        val target = File(dir, DEFAULT_LAYOUT_FILE_NAME)
+        if (!target.exists()) {
+            dir.mkdirs()
+            copyIfMissing(target)
+        }
+        return target
     }
 
     /**
