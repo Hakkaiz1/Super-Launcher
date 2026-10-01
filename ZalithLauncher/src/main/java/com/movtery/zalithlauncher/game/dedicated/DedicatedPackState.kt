@@ -18,14 +18,31 @@
 
 package com.movtery.zalithlauncher.game.dedicated
 
+import android.content.Context
+import com.movtery.zalithlauncher.BuildKeys
+import com.movtery.zalithlauncher.R
+import com.movtery.zalithlauncher.coroutine.TaskLogOutput
+import com.movtery.zalithlauncher.coroutine.TitledTask
 import com.movtery.zalithlauncher.game.download.modpack.technic.InsufficientSpaceException
 import com.movtery.zalithlauncher.game.download.modpack.technic.TechnicApi
+import com.movtery.zalithlauncher.game.download.modpack.technic.TechnicPackInstaller
+import com.movtery.zalithlauncher.game.path.GamePathManager
+import com.movtery.zalithlauncher.game.path.getVersionsHome
+import com.movtery.zalithlauncher.game.version.installed.VersionsManager
+import com.movtery.zalithlauncher.path.PathManager
 import com.movtery.zalithlauncher.ui.AndroidStringText
+import com.movtery.zalithlauncher.ui.androidText
 import com.movtery.zalithlauncher.utils.logging.Logger
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
+import kotlinx.coroutines.launch
+import java.io.File
 import java.net.ConnectException
 import java.net.UnknownHostException
 
@@ -112,5 +129,94 @@ object DedicatedPackState {
             current = current.cause
         }
         return ErrorKind.GENERIC
+    }
+
+    private val scope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
+    private var installer: TechnicPackInstaller? = null
+    private var appContext: Context? = null
+    private var collectorJobs: List<Job> = emptyList()
+
+    private val _tasks = MutableStateFlow<List<TitledTask>>(emptyList())
+    val tasks: StateFlow<List<TitledTask>> = _tasks.asStateFlow()
+
+    private val _logOutput = MutableStateFlow<TaskLogOutput?>(null)
+    val logOutput: StateFlow<TaskLogOutput?> = _logOutput.asStateFlow()
+
+    /**
+     * Ordem obrigatória (spec §5.1): refreshPaths → reloadPath/waitForRefresh →
+     * VersionsManager.waitForRefresh — só depois disso ler arquivo de jogo.
+     * Chamado pela MainActivity na abertura e pelo botão "Tentar de novo".
+     */
+    fun launchCheck(context: Context) {
+        appContext = context.applicationContext
+        dispatch(DedicatedEvent.CheckStarted)
+        scope.launch { check(context.applicationContext) }
+    }
+
+    internal suspend fun check(context: Context) {
+        try {
+            PathManager.refreshPaths(context)
+            GamePathManager.reloadPath()
+            GamePathManager.waitForRefresh()
+            VersionsManager.waitForRefresh()
+
+            val slug = BuildKeys.DEDICATED_PACK_SLUG
+            val versionDir = File(getVersionsHome(), slug)
+            val manifest = PackManifest.read(versionDir)
+            val versionJsonPresent = VersionsManager.isVersionExists(slug, true)
+
+            val pack = try {
+                TechnicApi.getPack(slug)
+            } catch (t: Throwable) {
+                dispatch(checkEvent(t))
+                return
+            }
+
+            val identity = PackManifest.identityOf(pack.version, pack.url)
+            dispatch(DedicatedEvent.CheckCompleted(manifest, versionJsonPresent, identity))
+        } catch (t: Throwable) {
+            dispatch(checkEvent(t))
+        }
+    }
+
+    private fun checkEvent(t: Throwable): DedicatedEvent = when (classifyError(t)) {
+        ErrorKind.OFFLINE -> DedicatedEvent.CheckOffline
+        ErrorKind.API_BUILD_REJECTED -> DedicatedEvent.CheckFailed(androidText(R.string.dedicated_error_api_build))
+        ErrorKind.INSUFFICIENT_SPACE -> DedicatedEvent.CheckFailed(androidText(R.string.dedicated_error_no_space))
+        ErrorKind.GENERIC -> DedicatedEvent.CheckFailed(androidText(R.string.dedicated_error_generic))
+    }
+
+    /** Inicia instalação/atualização (etapas 1-8 da spec §5.2). */
+    fun install(context: Context) {
+        if (_state.value is PackState.Installing) return
+        appContext = context.applicationContext
+        dispatch(DedicatedEvent.InstallRequested)
+
+        val inst = TechnicPackInstaller(scope)
+        installer = inst
+        collectorJobs.forEach { it.cancel() }
+        collectorJobs = listOf(
+            scope.launch { inst.tasksFlow.collect { _tasks.value = it } },
+            scope.launch { inst.logOutput.collect { _logOutput.value = it } }
+        )
+        inst.install(
+            context = context.applicationContext,
+            onInstalled = { dispatch(DedicatedEvent.InstallSucceeded) },
+            onCancel = { appContext?.let { c -> launchCheck(c) } },
+            onError = { e ->
+                if (classifyError(e) == ErrorKind.OFFLINE) dispatch(DedicatedEvent.CheckOffline)
+                else dispatch(DedicatedEvent.InstallFailed(errorMessage(e)))
+            }
+        )
+    }
+
+    private fun errorMessage(t: Throwable): AndroidStringText = when (classifyError(t)) {
+        ErrorKind.API_BUILD_REJECTED -> androidText(R.string.dedicated_error_api_build)
+        ErrorKind.INSUFFICIENT_SPACE -> androidText(R.string.dedicated_error_no_space)
+        else -> androidText(R.string.dedicated_error_generic)
+    }
+
+    fun cancelInstall() {
+        installer?.cancelInstall()
     }
 }
