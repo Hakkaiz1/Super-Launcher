@@ -33,13 +33,15 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.asImageBitmap
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.graphics.drawable.toBitmap
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.movtery.zalithlauncher.R
 import com.movtery.zalithlauncher.game.dedicated.DedicatedPackState
@@ -77,8 +79,14 @@ fun DedicatedScreen(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
+        // R.mipmap.ic_launcher é um adaptive-icon (XML) e o painterResource() do
+        // Compose só aceita VectorDrawable ou raster, então carregamos o ícone
+        // instalado do app como bitmap.
+        val launcherIcon = remember(context.packageManager, context.packageName) {
+            context.packageManager.getApplicationIcon(context.packageName).toBitmap().asImageBitmap()
+        }
         Image(
-            painter = painterResource(R.mipmap.ic_launcher),
+            bitmap = launcherIcon,
             contentDescription = null,
             modifier = Modifier.size(112.dp)
         )
