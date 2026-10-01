@@ -199,7 +199,8 @@ object Fetcher {
         targetFile: File,
         sha1: String? = null,
         retry: Int = DEFAULT_RETRY,
-        onBytes: (Long) -> Unit = {}
+        onBytes: (Long) -> Unit = {},
+        userAgent: String? = null
     ) {
         require(urls.isNotEmpty()) { "At least one URL is required" }
         require(retry > 0) { "Retry count must be greater than 0" }
@@ -213,7 +214,7 @@ object Fetcher {
                 continue
             }
             try {
-                downloadCandidate(url, targetFile, sha1, retry, onBytes)
+                downloadCandidate(url, targetFile, sha1, retry, onBytes, userAgent)
                 return
             } catch (e: CancellationException) {
                 throw e
@@ -251,7 +252,8 @@ object Fetcher {
         targetFile: File,
         sha1: String?,
         retry: Int,
-        onBytes: (Long) -> Unit
+        onBytes: (Long) -> Unit,
+        userAgent: String?
     ) {
         val state = CandidateState()
         val exceptions = mutableListOf<Exception>()
@@ -266,7 +268,7 @@ object Fetcher {
 
                 try {
                     val result = runInterruptible(Dispatchers.IO) {
-                        attempt(url, targetFile, sha1, state, onBytes)
+                        attempt(url, targetFile, sha1, state, onBytes, userAgent)
                     }
                     if (result == AttemptResult.DONE) return
                     //续传失效或 416：从头重来且不消耗重试次数
@@ -299,7 +301,8 @@ object Fetcher {
         targetFile: File,
         sha1: String?,
         state: CandidateState,
-        onBytes: (Long) -> Unit
+        onBytes: (Long) -> Unit,
+        userAgent: String?
     ): AttemptResult {
         var redirects: MutableList<URL>? = null
 
@@ -316,7 +319,7 @@ object Fetcher {
         var response: ResponseInfo?
 
         while (true) {
-            val conn = openConnection(currentUri)
+            val conn = openConnection(currentUri, userAgent)
             var keep = false
             try {
                 headers.forEach { (name, value) -> conn.setRequestProperty(name, value) }
@@ -437,12 +440,12 @@ object Fetcher {
         }
     }
 
-    private fun openConnection(url: URL): HttpURLConnection {
+    private fun openConnection(url: URL, userAgent: String?): HttpURLConnection {
         val connection = url.openConnection() as HttpURLConnection
         connection.connectTimeout = TIMEOUT_MILLIS
         connection.readTimeout = TIMEOUT_MILLIS
         connection.instanceFollowRedirects = false
-        connection.setRequestProperty("User-Agent", URL_USER_AGENT)
+        connection.setRequestProperty("User-Agent", userAgent ?: URL_USER_AGENT)
         return connection
     }
 

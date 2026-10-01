@@ -32,7 +32,9 @@ class DownloadRequest(
     /** 已知的文件大小，未知时传 -1；仅用于预分配与进度统计，最终以实际响应为准 */
     val expectedSize: Long = -1L,
     /** 调用方附带的上下文对象，在进度与成功回调中原样带回 */
-    val tag: Any? = null
+    val tag: Any? = null,
+    /** 覆盖默认 User-Agent；null 沿用启动器 UA（Dropbox 等源需要浏览器 UA） */
+    val userAgent: String? = null
 ) {
     init {
         require(urls.isNotEmpty()) { "Download requires at least one url" }

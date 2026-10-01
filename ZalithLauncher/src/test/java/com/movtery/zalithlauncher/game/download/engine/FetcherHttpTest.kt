@@ -95,6 +95,29 @@ class FetcherHttpTest {
     private val payload = ByteArray(1024).also { Random(7).nextBytes(it) }
 
     @Test
+    fun `sends the custom user agent when provided`() = runBlocking<Unit> {
+        val customUa = "Mozilla/5.0 (Linux; Android 14) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Mobile Safari/537.36"
+        val source = ScriptedSource { _, _ -> scriptedResponse(200, payload) }
+        val server = startServer(source)
+        val target = File(newWorkDir(), "out.bin")
+
+        Fetcher.downloadFile(listOf(server.url("/file").toString()), target, userAgent = customUa)
+
+        assertEquals(customUa, source.requests.first().headers["User-Agent"])
+    }
+
+    @Test
+    fun `keeps the launcher user agent by default`() = runBlocking<Unit> {
+        val source = ScriptedSource { _, _ -> scriptedResponse(200, payload) }
+        val server = startServer(source)
+        val target = File(newWorkDir(), "out.bin")
+
+        Fetcher.downloadFile(listOf(server.url("/file").toString()), target)
+
+        assertEquals(URL_USER_AGENT, source.requests.first().headers["User-Agent"])
+    }
+
+    @Test
     fun `downloads a file and verifies sha1`() = runBlocking<Unit> {
         val source = ScriptedSource { _, _ -> scriptedResponse(200, payload) }
         val server = startServer(source)

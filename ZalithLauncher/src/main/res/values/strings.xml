@@ -87,6 +87,25 @@
     <string name="launcher_version_debug_warning_cant_close">This warning cannot be dismissed</string>
     <!-- Dedicated Super Launcher build: mandatory modified-version notice (GPLv3 §7) -->
     <string name="unofficial_modified_notice" translatable="false">Unofficial Modified Version by Hakkaiz</string>
+    <!-- Dedicated Super Launcher build: dedicated screen, installer and errors (spec Fases 3-5) -->
+    <string name="dedicated_pack_title" translatable="false">DBC Super (Oficial)</string>
+    <string name="dedicated_install">Install</string>
+    <string name="dedicated_update">Update</string>
+    <string name="dedicated_play">Play</string>
+    <string name="dedicated_retry">Try again</string>
+    <string name="dedicated_offline">Offline</string>
+    <string name="dedicated_installing_title">Installing DBC Super</string>
+    <string name="dedicated_error_api_build">The Technic API rejected the launcher build number</string>
+    <string name="dedicated_error_no_space">Not enough free storage to extract the pack</string>
+    <string name="dedicated_error_generic">Installation failed</string>
+    <string name="dedicated_task_resolve_pack">Checking pack version</string>
+    <string name="dedicated_task_download">Downloading the pack</string>
+    <string name="dedicated_task_extract">Extracting the pack</string>
+    <string name="dedicated_task_resolve">Resolving the game version</string>
+    <string name="dedicated_task_base">Installing Minecraft and Forge</string>
+    <string name="dedicated_task_overlay">Applying pack files</string>
+    <string name="dedicated_task_seed">Configuring server and controls</string>
+    <string name="dedicated_task_select">Selecting the version</string>
     <!-- Themes -->
     <string name="theme_color_dynamic">Dynamic (Android 12+)</string>
     <string name="theme_color_embermire">Embermire</string>

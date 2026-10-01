@@ -1436,4 +1436,22 @@
     <string name="festivals_halloween">Feliz dia das bruxas!</string>
     <string name="festivals_valentines">Feliz Dia dos Namorados!</string>
     <string name="launch_check_mods">Verificando mods</string>
+    <!-- Super Launcher dedicado: tela, instalador e erros (spec Fases 3-5) -->
+    <string name="dedicated_install">Instalar</string>
+    <string name="dedicated_update">Atualizar</string>
+    <string name="dedicated_play">Jogar</string>
+    <string name="dedicated_retry">Tentar de novo</string>
+    <string name="dedicated_offline">Offline</string>
+    <string name="dedicated_installing_title">Instalando o DBC Super</string>
+    <string name="dedicated_error_api_build">A API do Technic rejeitou o número de build</string>
+    <string name="dedicated_error_no_space">Espaço de armazenamento insuficiente para extrair o pack</string>
+    <string name="dedicated_error_generic">Falha na instalação</string>
+    <string name="dedicated_task_resolve_pack">Verificando a versão do pack</string>
+    <string name="dedicated_task_download">Baixando o pack</string>
+    <string name="dedicated_task_extract">Extraindo o pack</string>
+    <string name="dedicated_task_resolve">Resolvendo a versão do jogo</string>
+    <string name="dedicated_task_base">Instalando Minecraft e Forge</string>
+    <string name="dedicated_task_overlay">Aplicando arquivos do pack</string>
+    <string name="dedicated_task_seed">Configurando servidor e controles</string>
+    <string name="dedicated_task_select">Selecionando a versão</string>
 </resources>

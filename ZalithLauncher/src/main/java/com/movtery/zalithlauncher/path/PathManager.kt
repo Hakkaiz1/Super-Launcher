@@ -51,6 +51,8 @@ class PathManager {
         lateinit var DIR_CACHE_MOD_UPDATER: File
         lateinit var DIR_CACHE_APP_ICON: File
         lateinit var DIR_CACHE_HOME_PAGE: File
+        /** temp_dedicated_pack — download e staging do pack dedicado (spec §5.2 etapa 2) */
+        lateinit var DIR_CACHE_DEDICATED_PACK: File
         lateinit var DIR_LAUNCHER_LOGS: File
         lateinit var DIR_NATIVE_LOGS: File
         lateinit var DIR_IMAGE_CACHE: File
@@ -94,6 +96,7 @@ class PathManager {
             DIR_CACHE_MOD_UPDATER = File(DIR_CACHE, "temp_mod_updater")
             DIR_CACHE_APP_ICON = File(DIR_CACHE, "app_icons")
             DIR_CACHE_HOME_PAGE = File(DIR_CACHE, "remote_homepage")
+            DIR_CACHE_DEDICATED_PACK = File(DIR_CACHE, "temp_dedicated_pack")
             DIR_LAUNCHER_LOGS = File(DIR_FILES_EXTERNAL, "logs")
             DIR_NATIVE_LOGS = File(DIR_LAUNCHER_LOGS, "native")
             DIR_IMAGE_CACHE = File(DIR_CACHE, "images")

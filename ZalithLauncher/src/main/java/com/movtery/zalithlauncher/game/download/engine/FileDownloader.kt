@@ -31,7 +31,8 @@ class FileDownloader(
             urls = request.urls,
             targetFile = request.targetFile,
             sha1 = request.sha1,
-            onBytes = stats::addBytes
+            onBytes = stats::addBytes,
+            userAgent = request.userAgent
         )
     }
 }
