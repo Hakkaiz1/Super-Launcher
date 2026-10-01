@@ -20,8 +20,12 @@ package com.movtery.zalithlauncher.ui.screens.content
 
 import com.movtery.zalithlauncher.BuildKeys
 import com.movtery.zalithlauncher.ui.screens.NestedNavKey
+import com.movtery.zalithlauncher.ui.screens.NormalNavKey
 import com.movtery.zalithlauncher.ui.screens.content.home.HomeCards
+import com.movtery.zalithlauncher.ui.screens.main.navigateToAccountScreen
+import com.movtery.zalithlauncher.ui.screens.onBack
 import com.movtery.zalithlauncher.viewmodel.ScreenBackStackViewModel
+import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertTrue
 import org.junit.Test
@@ -51,5 +55,36 @@ class DedicatedLockTest {
     fun `dedicated mode hides the home cards`() {
         assertTrue(BuildKeys.DEDICATED_MODE)
         assertTrue("nenhum card navegável na home dedicada", HomeCards.userCardTypes.isEmpty())
+    }
+
+    @Test
+    fun `dedicated mode keeps accounts reachable while the download funnel stays blocked`() {
+        assertTrue(BuildKeys.DEDICATED_MODE)
+
+        val viewModel = ScreenBackStackViewModel()
+        val mainScreen = viewModel.mainScreen
+
+        navigateToAccountScreen(mainScreen, viewModel.clearBeforeNavKeys)
+
+        assertEquals(
+            "abrir contas deve empilhar apenas LauncherMain + AccountManager",
+            listOf<Any>(NormalNavKey.LauncherMain, NormalNavKey.AccountManager(FirstLoginMenu.NONE)),
+            mainScreen.backStack.toList()
+        )
+
+        onBack(mainScreen.backStack)
+
+        assertEquals(
+            "o voltar deve cair na tela do pack (LauncherMain)",
+            listOf<Any>(NormalNavKey.LauncherMain),
+            mainScreen.backStack.toList()
+        )
+
+        viewModel.navigateToDownload()
+
+        assertFalse(
+            "o funil de download deve continuar bloqueado no modo dedicado",
+            mainScreen.backStack.any { it is NestedNavKey.Download }
+        )
     }
 }

@@ -194,6 +194,12 @@ fun MainScreen(
                 toDownloadScreen = {
                     screenBackStackModel.navigateToDownload()
                 },
+                toAccountScreen = {
+                    navigateToAccountScreen(
+                        backStack = screenBackStackModel.mainScreen,
+                        clearBeforeNavKeys = screenBackStackModel.clearBeforeNavKeys
+                    )
+                },
                 toMultiplayerScreen = {
                     screenBackStackModel.mainScreen.removeAndNavigateTo(
                         removes = screenBackStackModel.clearBeforeNavKeys,
@@ -255,6 +261,7 @@ private fun <E: TitledNavKey> TopBar(
     toSettingsScreen: () -> Unit,
     toDownloadScreen: () -> Unit,
     toMultiplayerScreen: () -> Unit,
+    toAccountScreen: () -> Unit,
     openFileManager: () -> Unit,
     changeExpandedState: () -> Unit,
 ) {
@@ -263,6 +270,7 @@ private fun <E: TitledNavKey> TopBar(
     val inMultiplayerScreen = mainScreenKey is NormalNavKey.Multiplayer
     val inDownloadScreen = mainScreenKey is NestedNavKey.Download
     val inSettingsScreen = mainScreenKey is NestedNavKey.Settings
+    val inAccountScreen = mainScreenKey is NormalNavKey.AccountManager
 
     CompositionLocalProvider(
         LocalContentColor provides contentColor
@@ -433,6 +441,17 @@ private fun <E: TitledNavKey> TopBar(
                         text = stringResource(R.string.generic_download),
                         onClick = {
                             if (!inDownloadScreen) toDownloadScreen()
+                        },
+                    )
+                }
+
+                if (BuildKeys.DEDICATED_MODE) {
+                    TopBarRailItem(
+                        selected = inAccountScreen,
+                        painter = painterResource(R.drawable.ic_person_outlined),
+                        text = stringResource(R.string.page_title_account_list),
+                        onClick = {
+                            if (!inAccountScreen) toAccountScreen()
                         },
                     )
                 }
