@@ -18,25 +18,32 @@
 
 package com.movtery.zalithlauncher.game.download.modpack.technic
 
+import android.content.Context
 import com.movtery.zalithlauncher.BuildKeys
 import com.movtery.zalithlauncher.R
 import com.movtery.zalithlauncher.coroutine.TaskFlowExecutor
 import com.movtery.zalithlauncher.coroutine.TaskLogOutput
 import com.movtery.zalithlauncher.coroutine.addTask
 import com.movtery.zalithlauncher.coroutine.buildPhase
+import com.movtery.zalithlauncher.game.addons.modloader.forgelike.forge.ForgeVersions
 import com.movtery.zalithlauncher.game.download.engine.DownloadEngine
 import com.movtery.zalithlauncher.game.download.engine.DownloadRequest
+import com.movtery.zalithlauncher.game.download.game.GameDownloadInfo
+import com.movtery.zalithlauncher.game.download.game.GameInstaller
 import com.movtery.zalithlauncher.game.dedicated.PackManifest
+import com.movtery.zalithlauncher.game.version.installed.VersionsManager
 import com.movtery.zalithlauncher.path.DOWNLOAD_OKHTTP_CLIENT
 import com.movtery.zalithlauncher.path.PathManager
 import com.movtery.zalithlauncher.path.createRequestBuilder
 import com.movtery.zalithlauncher.ui.androidText
+import com.movtery.zalithlauncher.utils.file.extractFromZip
 import com.movtery.zalithlauncher.utils.network.withSpeedReport
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.io.File
+import java.util.zip.ZipFile
 
 private const val TAG = "TechnicPackInstaller"
 
@@ -69,6 +76,26 @@ internal fun headContentLength(url: String): Long = runCatching {
         if (resp.isSuccessful) resp.body.contentLength() else -1L
     }
 }.getOrDefault(-1L)
+
+class InsufficientSpaceException(message: String) : RuntimeException(message)
+class PackForgeNotFoundException(message: String) : RuntimeException(message)
+
+/** Espaço livre antes de extrair (spec §10): zip + margem para o conteúdo extraído. */
+internal fun ensureFreeSpace(availableBytes: Long, requiredBytes: Long) {
+    if (availableBytes < requiredBytes) {
+        throw InsufficientSpaceException(
+            "Need ${requiredBytes / (1024 * 1024)} MB free ($requiredBytes bytes), have ${availableBytes / (1024 * 1024)} MB"
+        )
+    }
+}
+
+/** Etapa 3 (spec §5.2): extrai o zip inteiro para o staging, validando espaço antes. */
+internal suspend fun extractPack(zipFile: File, stagingDir: File) {
+    stagingDir.deleteRecursively()
+    stagingDir.mkdirs()
+    ensureFreeSpace(stagingDir.usableSpace, zipFile.length() * 2)
+    ZipFile(zipFile).use { it.extractFromZip("", stagingDir) }
+}
 
 /**
  * Instala/atualiza o pack dedicado (8 etapas da spec §5.2).
@@ -112,6 +139,50 @@ class TechnicPackInstaller(private val scope: CoroutineScope) {
                     report(delta)
                 }
             }
+            task.updateProgress(1f)
+        }
+    }
+
+    private var versionInfo: PackVersionInfo? = null
+    private var gameInstaller: GameInstaller? = null
+    private var appContext: Context? = null
+
+    /** Etapas 3-5: extrai, resolve a versão do pack e instala a base via caminho legado do Forge. */
+    internal fun extractBasePhase(): TaskFlowExecutor.TaskPhase = buildPhase {
+        addTask(id = "Dedicated.Extract", title = androidText(R.string.dedicated_task_extract)) { task ->
+            extractPack(packZipFile(), stagingDirectory())
+            task.updateProgress(1f)
+        }
+        addTask(id = "Dedicated.ResolveVersion", title = androidText(R.string.dedicated_task_resolve)) { task ->
+            val pack = requireNotNull(pack)
+            versionInfo = TechnicPackVersionResolver.resolve(stagingDirectory(), pack.minecraft)
+            task.updateProgress(1f)
+        }
+        addTask(id = "Dedicated.InstallBase", title = androidText(R.string.dedicated_task_base)) { task ->
+            val info = requireNotNull(versionInfo)
+            val forgeVersion = ForgeVersions.fetchForgeList(info.minecraft)
+                ?.firstOrNull { it.forgeBuildVersion.toString() == info.forgeBuild }
+                ?: throw PackForgeNotFoundException(
+                    "Forge ${info.forgeBuild} not found for Minecraft ${info.minecraft}"
+                )
+            val slug = BuildKeys.DEDICATED_PACK_SLUG
+            val gameInfo = GameDownloadInfo(
+                gameVersion = info.minecraft,
+                customVersionName = slug,
+                // sobrescreve quando o json já existe: evita GameAlreadyInstalledException no update
+                overwrite = VersionsManager.isVersionExists(slug, true),
+                forge = forgeVersion
+            )
+            val installer = GameInstaller(
+                context = requireNotNull(appContext) { "install() was not called yet" },
+                info = gameInfo,
+                scope = scope,
+                logOutputHolder = _logOutput
+            )
+            gameInstaller = installer
+            // addPhases dinâmico: as fases do GameInstaller entram no fluxo em tempo de execução
+            // (mesmo padrão do ModPackInstaller.kt:241-280); overlay/seed/select chegam na Task 8.
+            taskExecutor.addPhases(installer.getTaskPhase(createIsolation = true))
             task.updateProgress(1f)
         }
     }

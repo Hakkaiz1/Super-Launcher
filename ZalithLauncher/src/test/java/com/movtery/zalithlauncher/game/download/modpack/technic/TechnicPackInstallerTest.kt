@@ -18,10 +18,17 @@
 
 package com.movtery.zalithlauncher.game.download.modpack.technic
 
+import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNull
+import org.junit.Assert.assertTrue
+import org.junit.Assert.fail
 import org.junit.Test
 import java.io.File
+import java.io.FileOutputStream
+import java.nio.file.Files
+import java.util.zip.ZipEntry
+import java.util.zip.ZipOutputStream
 
 class TechnicPackInstallerTest {
 
@@ -42,5 +49,40 @@ class TechnicPackInstallerTest {
         assertEquals(-1f, progressOf(512L, 0L), 0.0001f)
         assertEquals(0.5f, progressOf(512L, 1024L), 0.0001f)
         assertEquals(1f, progressOf(4096L, 1024L), 0.0001f)
+    }
+
+    @Test
+    fun `extract unpacks the whole archive into staging`() = runBlocking<Unit> {
+        val root = Files.createTempDirectory("dedicated-extract").toFile()
+        try {
+            val zip = File(root, "pack.zip")
+            ZipOutputStream(FileOutputStream(zip)).use { zos ->
+                zos.putNextEntry(ZipEntry("bin/version.json"))
+                zos.write("""{"id":"x"}""".toByteArray())
+                zos.closeEntry()
+                zos.putNextEntry(ZipEntry("mods/a.jar"))
+                zos.write(byteArrayOf(1, 2, 3))
+                zos.closeEntry()
+            }
+            val staging = File(root, "staging")
+
+            extractPack(zip, staging)
+
+            assertTrue(File(staging, "bin/version.json").isFile)
+            assertTrue(File(staging, "mods/a.jar").isFile)
+        } finally {
+            root.deleteRecursively()
+        }
+    }
+
+    @Test
+    fun `free space is required before extracting`() {
+        ensureFreeSpace(availableBytes = 200L, requiredBytes = 100L)   // não lança
+        try {
+            ensureFreeSpace(availableBytes = 50L, requiredBytes = 100L)
+            fail("deveria lançar InsufficientSpaceException")
+        } catch (expected: InsufficientSpaceException) {
+            assertTrue(expected.message!!.contains("100"))
+        }
     }
 }
