@@ -472,17 +472,22 @@ fun LoginMenuDialog(
                             ),
                             verticalArrangement = Arrangement.spacedBy(12.dp)
                         ) {
-                            item {
-                                //添加认证服务器
-                                InfoLayoutTextItem(
-                                    modifier = Modifier.fillMaxWidth(),
-                                    title = stringResource(R.string.account_add_new_server_button),
-                                    showArrow = true,
-                                    onClick = {
-                                        onAddAuthServer()
-                                        onDismissRequest()
-                                    }
-                                )
+                            // §6: no modo dedicado só existem conta Microsoft e conta offline;
+                            // servidores de autenticação já cadastrados continuam listados abaixo,
+                            // apenas o botão de adicionar some.
+                            if (!BuildKeys.DEDICATED_MODE) {
+                                item {
+                                    //添加认证服务器
+                                    InfoLayoutTextItem(
+                                        modifier = Modifier.fillMaxWidth(),
+                                        title = stringResource(R.string.account_add_new_server_button),
+                                        showArrow = true,
+                                        onClick = {
+                                            onAddAuthServer()
+                                            onDismissRequest()
+                                        }
+                                    )
+                                }
                             }
 
                             items(authServers) { server ->
