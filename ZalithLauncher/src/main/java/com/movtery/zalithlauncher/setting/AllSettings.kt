@@ -25,6 +25,10 @@ import androidx.compose.ui.graphics.toArgb
 import com.materialkolor.PaletteStyle
 import com.movtery.layer_controller.utils.snap.SnapMode
 import com.movtery.zalithlauncher.BuildKeys
+import com.movtery.zalithlauncher.game.dedicated.DEDICATED_RESOLUTION_RATIO
+import com.movtery.zalithlauncher.game.dedicated.DEDICATED_RESOLUTION_RULE
+import com.movtery.zalithlauncher.game.dedicated.DEDICATED_SUSTAINED_PERFORMANCE
+import com.movtery.zalithlauncher.game.dedicated.dedicatedJvmArgs
 import com.movtery.zalithlauncher.game.download.assets.platform.Platform
 import com.movtery.zalithlauncher.game.path.GamePathManager
 import com.movtery.zalithlauncher.game.version.installed.GraphicsApi
@@ -65,12 +69,12 @@ object AllSettings : SettingsRegistry() {
     /**
      * 分辨率
      */
-    val resolutionRatio = intSetting("resolutionRatio", 100, 25..300)
+    val resolutionRatio = intSetting("resolutionRatio", if (BuildKeys.DEDICATED_MODE) DEDICATED_RESOLUTION_RATIO else 100, 25..300)
 
     /**
      * 分辨率规则
      */
-    val resolutionRule = enumSetting("resolutionRule", ResolutionRule.PERCENTAGE)
+    val resolutionRule = enumSetting("resolutionRule", if (BuildKeys.DEDICATED_MODE) DEDICATED_RESOLUTION_RULE else ResolutionRule.PERCENTAGE)
 
     /**
      * 自定义分辨率宽度，0 表示尚未初始化
@@ -95,7 +99,7 @@ object AllSettings : SettingsRegistry() {
     /**
      * 持续性能模式
      */
-    val sustainedPerformance = boolSetting("sustainedPerformance", false)
+    val sustainedPerformance = boolSetting("sustainedPerformance", DEDICATED_SUSTAINED_PERFORMANCE)
 
     /**
      * 使用系统的 Vulkan 驱动
@@ -146,7 +150,7 @@ object AllSettings : SettingsRegistry() {
     /**
      * 自定义Jvm启动参数
      */
-    val jvmArgs = stringSetting("jvmArgs", "")
+    val jvmArgs = stringSetting("jvmArgs", if (BuildKeys.DEDICATED_MODE) dedicatedJvmArgs else "")
 
     /**
      * 已禁用的原生库插件列表

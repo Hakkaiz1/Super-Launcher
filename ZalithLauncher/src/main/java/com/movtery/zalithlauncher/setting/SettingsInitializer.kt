@@ -19,12 +19,15 @@
 package com.movtery.zalithlauncher.setting
 
 import android.content.Context
+import com.movtery.zalithlauncher.BuildKeys
+import com.movtery.zalithlauncher.game.dedicated.DEDICATED_RAM_ALLOCATION
+import com.movtery.zalithlauncher.game.dedicated.LWJGL_OPENGL_LIB_NAME_ARG
 import com.movtery.zalithlauncher.utils.device.Architecture
 import com.movtery.zalithlauncher.utils.platform.bytesToMB
 import com.movtery.zalithlauncher.utils.platform.getTotalMemory
 import com.movtery.zalithlauncher.utils.string.splitPreservingQuotes
 
-private const val LWJGL_LIB_NAME_ARG = "-Dorg.lwjgl.opengl.libname="
+private const val LWJGL_LIB_NAME_ARG = LWJGL_OPENGL_LIB_NAME_ARG
 
 /**
  * 初始化处理所有设置项
@@ -33,7 +36,10 @@ private const val LWJGL_LIB_NAME_ARG = "-Dorg.lwjgl.opengl.libname="
 fun loadAllSettings(context: Context, reloadAll: Boolean = false) {
     if (reloadAll) AllSettings.reloadAll()
     if (AllSettings.ramAllocation.getValue() == null) {
-        val ram = findBestRAMAllocation(context)
+        // O modo dedicado entrega a RAM da marca; os demais builds seguem a
+        // heurística abaixo. A RAM nunca vem do default do setting porque é
+        // gravada aqui no primeiro boot.
+        val ram = if (BuildKeys.DEDICATED_MODE) DEDICATED_RAM_ALLOCATION else findBestRAMAllocation(context)
         AllSettings.ramAllocation.save(ram)
     }
     val jvmArgs = AllSettings.jvmArgs.getValue()
