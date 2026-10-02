@@ -193,10 +193,11 @@ private fun DedicatedButton(
         onClick = onClick,
         modifier = Modifier
             // Botão compacto, como na arte: encolhe até o conteúdo em vez de
-            // esticar. A altura de 48dp é o mínimo de área de toque do
-            // Material, então a ergonomia não paga pela estética.
-            .height(48.dp)
-            .widthIn(max = 320.dp)
+            // esticar. A largura mínima mantém o mesmo peso visual entre os
+            // estados ("Jogar", "Instalar", "Tentar de novo") e a altura de
+            // 56dp é o padrão do Material para botões.
+            .height(56.dp)
+            .widthIn(min = 240.dp, max = 380.dp)
             // O Button do Material 3 só aceita cor chapada; o gradiente vai no
             // container (mesmo shape, mesmo ripple por cima) e o botão fica
             // transparente por cima dele.
