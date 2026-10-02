@@ -46,6 +46,7 @@ class DBCSuperThemeTest {
         assertContrast("surface/secondary", dbcSuperDark.surface, dbcSuperDark.secondary)
         assertContrast("surface/outline", dbcSuperDark.surface, dbcSuperDark.outline)
         assertContrast("error/onError", dbcSuperDark.error, dbcSuperDark.onError)
+        assertContrast("primary/onPrimary", dbcSuperDark.primary, dbcSuperDark.onPrimary)
     }
 
     @Test
@@ -58,6 +59,15 @@ class DBCSuperThemeTest {
         assertContrast("surface/secondary", dbcSuperLight.surface, dbcSuperLight.secondary)
         assertContrast("surface/outline", dbcSuperLight.surface, dbcSuperLight.outline)
         assertContrast("error/onError", dbcSuperLight.error, dbcSuperLight.onError)
+    }
+
+    @Test
+    fun `the play button label stays readable on both ends of its gradient`() {
+        // O botão Jogar usa um gradiente primary → tertiary, e o rótulo usa
+        // onPrimary. Isso só é seguro se onPrimary contraste com as DUAS pontas,
+        // não só com a primary — é o que estes dois casos fixam.
+        assertContrast("dark onPrimary/tertiary", dbcSuperDark.onPrimary, dbcSuperDark.tertiary)
+        assertContrast("light onPrimary/tertiary", dbcSuperLight.onPrimary, dbcSuperLight.tertiary)
     }
 
     @Test
