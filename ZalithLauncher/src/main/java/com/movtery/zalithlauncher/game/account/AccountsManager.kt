@@ -19,6 +19,7 @@
 package com.movtery.zalithlauncher.game.account
 
 import android.content.Context
+import com.movtery.zalithlauncher.BuildKeys
 import com.movtery.zalithlauncher.R
 import com.movtery.zalithlauncher.coroutine.Task
 import com.movtery.zalithlauncher.coroutine.TaskSystem
@@ -248,7 +249,11 @@ object AccountsManager {
 
     private fun checkLimit(): Boolean {
         val circumventLimit = File(PathManager.DIR_FILES_EXTERNAL, "circumventLimit")
-        return !circumventLimit.exists() && !isInGreaterChina() && !hasMicrosoftAccount()
+        return isNonGenuineState(
+            circumventLimitExists = circumventLimit.exists(),
+            inGreaterChina = isInGreaterChina(),
+            hasMicrosoftAccount = hasMicrosoftAccount()
+        )
     }
 
     /**
@@ -338,3 +343,26 @@ object AccountsManager {
         return baseUrl.isNotEmpty() && _authServers.any { it.baseUrl == baseUrl }
     }
 }
+
+/**
+ * Regra upstream do estado "nao-genuino" (非正版状态).
+ *
+ * Fica como funcao pura porque o [checkLimit] original depende de arquivo,
+ * locale e banco - nenhum teste de JVM alcancaria esse gate, que e justamente
+ * o que decide se a conta offline (so nick) pode existir.
+ *
+ * O modo dedicado nunca entra nesse estado. Upstream usa o gate para empurrar o
+ * usuario para a conta Microsoft: o botao de adicionar conta passa a abrir
+ * direto a autenticacao da Microsoft e o launcher ainda zera a conta corrente,
+ * o que torna a conta offline inalcancavel - o usuario criava a conta e mesmo
+ * assim o jogo recusava. Como o Super Launcher oferece conta Microsoft e conta
+ * offline, o gate inteiro atrapalha mais do que protege.
+ */
+internal fun isNonGenuineState(
+    circumventLimitExists: Boolean,
+    inGreaterChina: Boolean,
+    hasMicrosoftAccount: Boolean
+): Boolean = !BuildKeys.DEDICATED_MODE &&
+        !circumventLimitExists &&
+        !inGreaterChina &&
+        !hasMicrosoftAccount
