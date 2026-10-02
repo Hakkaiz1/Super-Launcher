@@ -28,6 +28,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -191,8 +192,11 @@ private fun DedicatedButton(
     Button(
         onClick = onClick,
         modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp)
+            // Botão compacto, como na arte: encolhe até o conteúdo em vez de
+            // esticar. A altura de 48dp é o mínimo de área de toque do
+            // Material, então a ergonomia não paga pela estética.
+            .height(48.dp)
+            .widthIn(max = 320.dp)
             // O Button do Material 3 só aceita cor chapada; o gradiente vai no
             // container (mesmo shape, mesmo ripple por cima) e o botão fica
             // transparente por cima dele.
