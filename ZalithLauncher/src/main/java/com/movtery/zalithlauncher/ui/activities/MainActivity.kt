@@ -49,6 +49,8 @@ import com.movtery.zalithlauncher.filemanager.events.FileManagerEvent
 import com.movtery.zalithlauncher.filemanager.events.FileManagerEventRegistrar
 import com.movtery.zalithlauncher.game.control.ControlManager
 import com.movtery.zalithlauncher.game.dedicated.DedicatedPackState
+import com.movtery.zalithlauncher.game.dedicated.installBrandBackground
+import com.movtery.zalithlauncher.game.dedicated.shouldInstallBrandBackground
 import com.movtery.zalithlauncher.game.path.getVersionsHome
 import com.movtery.zalithlauncher.game.plugin.PluginLoader
 import com.movtery.zalithlauncher.game.renderer.Renderers
@@ -188,6 +190,10 @@ class MainActivity : BaseAppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        //图片背景必须在 BackgroundViewModel 创建之前就位，否则 isValid 会是 false
+        if (BuildKeys.DEDICATED_MODE) {
+            installBrandBackgroundIfNeeded()
+        }
         //处理外部导入
         val isImporting = handleImportIfNeeded(intent)
 
@@ -519,6 +525,36 @@ class MainActivity : BaseAppCompatActivity() {
         fmEventRegistrar?.stop()
         fmEventRegistrar = null
         super.onDestroy()
+    }
+
+    /**
+     * Semear a imagem de fundo da marca (modo dedicado).
+     *
+     * O arquivo é o mesmo que o BackgroundViewModel já lê, então a partir
+     * daqui o blur, a opacidade e o vidro passam a valer sem nenhuma linha
+     * nova de renderização. A política de "uma vez só" mora em
+     * BrandBackground.kt.
+     */
+    private fun installBrandBackgroundIfNeeded() {
+        val backgroundFile = PathManager.FILE_LAUNCHER_BACKGROUND
+        val alreadyInstalled = AllSettings.brandBackgroundInstalled.state
+
+        if (!shouldInstallBrandBackground(backgroundFile, alreadyInstalled)) return
+
+        val written = runCatching {
+            resources.openRawResource(R.raw.dbc_super_background).use { source ->
+                installBrandBackground(source, backgroundFile)
+            }
+        }.getOrElse { false }
+
+        if (written) {
+            AllSettings.brandBackgroundInstalled.save(true)
+        } else {
+            Logger.warning(
+                "MainActivity",
+                "Failed to install the brand background image; continuing without it."
+            )
+        }
     }
 
     /**

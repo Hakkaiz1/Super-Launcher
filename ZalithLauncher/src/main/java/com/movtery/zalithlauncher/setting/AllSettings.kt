@@ -431,7 +431,20 @@ object AllSettings : SettingsRegistry() {
     /**
      * 启动器背景模糊效果
      */
-    val backgroundBlur = intSetting("backgroundBlur", 0, 0..40)
+    val backgroundBlur = intSetting(
+        "backgroundBlur",
+        if (BuildKeys.DEDICATED_MODE) 12 else 0,
+        0..40
+    )
+
+    /**
+     * Imagem de fundo da marca já foi semeada uma vez.
+     *
+     * Existe para que o botão "Resetar" das configurações tenha efeito
+     * durável: sem este registro, a arte voltaria sozinha na próxima abertura
+     * sempre que o arquivo de fundo não existisse.
+     */
+    val brandBackgroundInstalled = boolSetting("brandBackgroundInstalled", false)
 
     /**
      * 启动器背景模糊效果类型
