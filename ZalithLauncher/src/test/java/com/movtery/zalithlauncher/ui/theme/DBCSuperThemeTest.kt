@@ -1,4 +1,4 @@
-/*
+﻿/*
  * Zalith Launcher 2
  * Copyright (C) 2025 MovTery <movtery228@qq.com> and contributors
  *
@@ -22,9 +22,6 @@ import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
 import org.junit.Assert.assertTrue
 import org.junit.Test
-import kotlin.math.max
-import kotlin.math.min
-import kotlin.math.pow
 
 /**
  * Paleta de marca "DBC Super" (derivada da arte oficial do pack).
@@ -150,25 +147,4 @@ class DBCSuperThemeTest {
         else -> error("papel desconhecido: $name")
     }
 
-    private fun assertContrast(what: String, foreground: Color, background: Color) {
-        val ratio = contrastRatio(foreground, background)
-        assertTrue(
-            "$what tem contraste %.2f:1, abaixo de 4.5:1 (%s sobre %s)".format(ratio, foreground, background),
-            ratio >= 4.5
-        )
-    }
-
-    private fun contrastRatio(a: Color, b: Color): Double {
-        val la = luminance(a)
-        val lb = luminance(b)
-        return (max(la, lb) + 0.05) / (min(la, lb) + 0.05)
-    }
-
-    private fun luminance(color: Color): Double {
-        fun channel(c: Float): Double {
-            val v = c.toDouble()
-            return if (v <= 0.03928) v / 12.92 else ((v + 0.055) / 1.055).pow(2.4)
-        }
-        return 0.2126 * channel(color.red) + 0.7152 * channel(color.green) + 0.0722 * channel(color.blue)
-    }
 }

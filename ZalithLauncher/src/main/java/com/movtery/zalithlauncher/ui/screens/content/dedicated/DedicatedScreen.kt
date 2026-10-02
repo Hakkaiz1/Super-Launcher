@@ -28,9 +28,11 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,6 +43,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.asImageBitmap
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
@@ -115,7 +118,11 @@ fun DedicatedScreen(
                 CircularProgressIndicator(modifier = Modifier.size(48.dp))
             }
             PackState.Ready -> {
-                DedicatedButton(text = stringResource(R.string.dedicated_play), onClick = onLaunchGame)
+                DedicatedButton(
+                    text = stringResource(R.string.dedicated_play),
+                    onClick = onLaunchGame,
+                    leadingIcon = R.drawable.ic_play_arrow_filled
+                )
             }
             PackState.NotInstalled -> {
                 DedicatedButton(
@@ -161,9 +168,25 @@ fun DedicatedScreen(
     }
 }
 
+/**
+ * Gradiente dourado do botão de ação, da identidade DBC SUPER.
+ *
+ * É fixo em vez de vir do tema porque as duas pontas são claras e o rótulo
+ * precisa ser escuro nos dois extremos; o DedicatedPlayButtonTest garante que
+ * essa legibilidade não se perde se alguém trocar as cores.
+ */
+internal val playButtonGradient = listOf(Color(0xFFFFD34D), Color(0xFFF5A524))
+
+/** Rótulo escuro: legível sobre as duas pontas claras do gradiente. */
+internal val playButtonLabel = Color(0xFF2B1500)
+
 @Composable
-private fun DedicatedButton(text: String, onClick: () -> Unit) {
-    val colors = MaterialTheme.colorScheme
+private fun DedicatedButton(
+    text: String,
+    onClick: () -> Unit,
+    leadingIcon: Int? = null
+) {
+    val shape = RoundedCornerShape(percent = 50)
 
     Button(
         onClick = onClick,
@@ -172,17 +195,22 @@ private fun DedicatedButton(text: String, onClick: () -> Unit) {
             .height(56.dp)
             // O Button do Material 3 só aceita cor chapada; o gradiente vai no
             // container (mesmo shape, mesmo ripple por cima) e o botão fica
-            // transparente. O rótulo usa onPrimary, que o DBCSuperThemeTest
-            // garante contrastar com as DUAS pontas do gradiente.
-            .background(
-                brush = Brush.linearGradient(listOf(colors.primary, colors.tertiary)),
-                shape = ButtonDefaults.shape
-            ),
+            // transparente por cima dele.
+            .background(brush = Brush.linearGradient(playButtonGradient), shape = shape),
+        shape = shape,
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.Transparent,
-            contentColor = colors.onPrimary
+            contentColor = playButtonLabel
         )
     ) {
+        if (leadingIcon != null) {
+            Icon(
+                painter = painterResource(leadingIcon),
+                contentDescription = null,
+                modifier = Modifier.size(20.dp)
+            )
+            Spacer(Modifier.size(8.dp))
+        }
         Text(text = text, style = MaterialTheme.typography.titleMedium)
     }
 }
