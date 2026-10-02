@@ -1453,6 +1453,8 @@
     <string name="dedicated_task_resolve">Resolvendo a versão do jogo</string>
     <string name="dedicated_task_base">Instalando Minecraft e Forge</string>
     <string name="dedicated_task_overlay">Aplicando arquivos do pack</string>
+    <string name="dedicated_task_download_mods">Baixando os mods</string>
+    <string name="dedicated_error_mods_archive">O arquivo de mods baixado não é um zip válido. Verifique se o link baixa o arquivo direto e se o arquivo é realmente um zip.</string>
     <string name="dedicated_task_seed">Configurando servidor e controles</string>
     <string name="dedicated_task_select">Selecionando a versão</string>
 </resources>

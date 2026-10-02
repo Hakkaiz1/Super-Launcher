@@ -33,6 +33,7 @@ import com.movtery.zalithlauncher.game.download.game.GameDownloadInfo
 import com.movtery.zalithlauncher.game.download.game.GameInstaller
 import com.movtery.zalithlauncher.game.dedicated.DedicatedSeeder
 import com.movtery.zalithlauncher.game.dedicated.PackManifest
+import com.movtery.zalithlauncher.game.dedicated.installDedicatedMods
 import com.movtery.zalithlauncher.game.path.getVersionsHome
 import com.movtery.zalithlauncher.game.version.installed.VersionsManager
 import com.movtery.zalithlauncher.path.DOWNLOAD_OKHTTP_CLIENT
@@ -230,6 +231,7 @@ class TechnicPackInstaller(private val scope: CoroutineScope) {
             taskExecutor.addPhases(
                 installer.getTaskPhase(createIsolation = true) + listOf(
                     overlayPhase(stagingDirectory(), versionDir(), oldManifest),
+                    modsPhase(versionDir()),
                     seedPhase(
                         context = requireNotNull(appContext) { "install() was not called yet" },
                         stagingDir = stagingDirectory(),
@@ -257,6 +259,26 @@ class TechnicPackInstaller(private val scope: CoroutineScope) {
 
     /** `versions/<slug>` — alvo do overlay e do seed (isolation ativa). */
     private fun versionDir(): File = File(getVersionsHome(), BuildKeys.DEDICATED_PACK_SLUG)
+
+    /**
+     * Etapa dos mods: depois do overlay (que traz a `mods/` do pack) e antes do
+     * seed, para o zip do Dropbox virar a lista final de mods.
+     *
+     * O pack do Technic continua sendo a base do jogo; este passo só troca a
+     * pasta `mods/`. Com `DEDICATED_MODS_URL` vazio a fase sai inteira.
+     */
+    internal fun modsPhase(versionDir: File): TaskFlowExecutor.TaskPhase = buildPhase {
+        addTask(id = "Dedicated.DownloadMods", title = androidText(R.string.dedicated_task_download_mods)) { task ->
+            installDedicatedMods(
+                url = BuildKeys.DEDICATED_MODS_URL,
+                versionDir = versionDir,
+                cacheDir = PathManager.DIR_CACHE_DEDICATED_PACK,
+                onProgress = { pct -> task.updateProgress(pct) },
+                onSpeedReport = { bytes -> task.updateSpeed(bytes) },
+                onSpeedClear = { task.clearSpeed() }
+            )
+        }
+    }
 
     /** Etapas 7 (§5.2 + §7): layout, version.config, servidor — e o manifesto POR ÚLTIMO. */
     internal fun seedPhase(

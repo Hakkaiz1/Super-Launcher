@@ -104,6 +104,8 @@
     <string name="dedicated_task_resolve">Resolving the game version</string>
     <string name="dedicated_task_base">Installing Minecraft and Forge</string>
     <string name="dedicated_task_overlay">Applying pack files</string>
+    <string name="dedicated_task_download_mods">Downloading the mods</string>
+    <string name="dedicated_error_mods_archive">The downloaded mods file is not a valid zip. Check that the link downloads the file directly and that the file is really a zip.</string>
     <string name="dedicated_task_seed">Configuring server and controls</string>
     <string name="dedicated_task_select">Selecting the version</string>
     <!-- Themes -->
