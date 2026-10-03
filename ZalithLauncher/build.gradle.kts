@@ -221,7 +221,7 @@ buildKeys {
     boolean("DEDICATED_MODE", true)
     // Mods do pack dedicado, baixados de um zip no Dropbox depois da base do
     // Technic. URL vazia = passo desligado.
-    string("DEDICATED_MODS_URL", "https://www.dropbox.com/scl/fi/so85a3i9lg8p6b6s1ms4v/mods.zip?rlkey=xdl13feb4mmrf08wxmrk0ufpn&st=8eyfksk8&dl=1")
+    string("DEDICATED_MODS_URL", "https://www.dropbox.com/scl/fi/3j3hyh4dznll1ld35bds7/mods.zip?rlkey=k8kfs70ncdgd3291f79fjfzz1&st=dhilvbo9&dl=1")
     string("DEDICATED_PACK_SLUG", "dbc-super-oficial")
     string("DEDICATED_SERVER_NAME", "Minecraft Server")
     string("DEDICATED_SERVER_IP", "dbcsuper.com")
