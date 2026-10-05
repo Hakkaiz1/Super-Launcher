@@ -1,0 +1,8 @@
+{
+  "schemaVersion": 1,
+  "server": {
+    "name": "DBC Super Oficial",
+    "host": "n3.mines.host",
+    "port": 8212
+  }
+}
