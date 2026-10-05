@@ -1,14 +1,55 @@
 # 🚀 DBC Super Launcher
 
-Repositrio oficial de distribuio, releases e informaes do servidor **DBC Super**.
+Repositório oficial do **DBC Super**, reunindo o launcher, releases, atualizações e informações oficiais do servidor.
 
 ## 📥 Download
-Baixe a verso mais recente do launcher para Windows diretamente na aba [Releases](https://github.com/Hakkaiz1/super-launcher/releases).
+
+Baixe a versão mais recente do **DBC Super Launcher para Windows** diretamente na página de releases:
+
+[⬇️ Baixar a versão mais recente](https://github.com/Hakkaiz1/super-launcher/releases?utm_source=chatgpt.com)
+
+> **Recomendação:** sempre utilize a versão mais recente do launcher para garantir acesso às últimas atualizações e correções.
+
+---
 
 ## 🌐 Servidor Oficial
-- **Nome:** DBC Super Oficial
-- **IP:** n3.mines.host:8212
-- **Verso:** Minecraft 1.7.10
 
-## 📢 Anncios e Novidades
-Os anncios, novidades e patch notes do servidor so sincronizados automaticamente atravs deste repositrio.
+| Informação | Detalhes             |
+| ---------- | -------------------- |
+| **Nome**   | DBC Super Oficial    |
+| **IP**     | `...` |
+| **Versão** | Minecraft 1.7.10     |
+
+---
+
+## 📢 Anúncios e Novidades
+
+Este repositório também centraliza os **anúncios, novidades, atualizações e patch notes** do DBC Super.
+
+As informações são sincronizadas automaticamente para manter a comunidade sempre atualizada sobre as mudanças no servidor.
+
+---
+
+## 🛠️ Atualizações
+
+Acompanhe a aba **Releases** para conferir:
+
+* 🆕 Novas versões do launcher
+* 🔧 Correções e melhorias
+* ⚡ Atualizações do servidor
+* 📋 Patch notes
+* 📢 Comunicados importantes
+
+---
+
+## 📌 Links Oficiais
+
+* 🚀 **Launcher:** [GitHub Releases](https://github.com/Hakkaiz1/super-launcher/releases?utm_source=chatgpt.com)
+* 🌐 **Servidor:** `...`
+* 🎮 **Minecraft:** `1.7.10`
+
+---
+
+### ⭐ DBC Super
+
+**Entre no servidor, fique por dentro das novidades e acompanhe todas as atualizações por aqui.**
