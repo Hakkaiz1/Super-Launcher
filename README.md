@@ -42,14 +42,6 @@ Acompanhe a aba **Releases** para conferir:
 
 ---
 
-## 📌 Links Oficiais
-
-* 🚀 **Launcher:** [GitHub Releases](https://github.com/Hakkaiz1/super-launcher/releases?utm_source=chatgpt.com)
-* 🌐 **Servidor:** `...`
-* 🎮 **Minecraft:** `1.7.10`
-
----
-
 ### ⭐ DBC Super
 
 **Entre no servidor, fique por dentro das novidades e acompanhe todas as atualizações por aqui.**
