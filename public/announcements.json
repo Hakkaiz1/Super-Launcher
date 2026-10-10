@@ -1,9 +1,16 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-09T13:06:51.440Z",
+  "generatedAt": "2026-10-10T12:19:35.823Z",
   "updates": {
-    "cursor": "1558101561429721099",
+    "cursor": "1558449427574816779",
     "messages": [
+      {
+        "id": "1558449427574816779",
+        "content": "```\n* Atualização Dia 10/10/2026\n\n* Corrigidos:\n  - Dano em areas safes\n  - Bug de quebrar armadura\n  - o status DEX não estava funcionado corretamente (Isso deve equilibrar o PvP)\n  - Laucher mobile agora consegue jogar normalmente\n\n* Tab-list:\n  - Tentativa de ajustar o espaçamento \n\n* Adicionados:\n  - Possibilidade de usar shaders com o Angelica, precisa de um mod auxiliar que vai ser liberado na sala inicio\n\n```",
+        "author": "Lopes",
+        "timestamp": "2026-10-10T12:01:38.124Z",
+        "attachments": []
+      },
       {
         "id": "1558101561429721099",
         "content": "```\n* Atualização Dia 09/10/2026\n\n* Treino Básico e Supremo:\n  - Completa automaticamente ao matar todos os npcs \n  - Inicia a próxima missão automaticamente \n \n* Tab-list:\n  - Adicionado tab-list costumizado \n\n* Marca majin: \n  - Não perde ela ao morrer\n  - Ao utilizar o item Marca Majin vai liberar ela no /marcas onde você pode ativar e desativar\n\n* Kaioken: \n  - Corrigido o kaioken ficar \"piscando\" e perdendo os multiplicadores\n\n* Party:\n  - Adicionado anti-afk na party\n  - Party agora aumenta 100% do drop se todos jogadores for do clan (Em vez de multiplicar o drop final)\n\n* Ajustado bonus das raças:\n        DANO     |  DEFESA  | ROUBO DE HP\nSaiyan    +15%     |    +10%    |   —\nHalf Saiyan    +15% |  +10%    |    —\nArcosian    +10% |  +15%    |    —\nNamek        -    |    25%     |\nHuman    +10%     |    +10%    |  +5%\nMajin    +10%     | +10%        |  +5%\n\n```",
@@ -205,13 +212,6 @@
         "content": "```\n* Atualização Dia 28/03/2026\n\n* Reparado o Teleport do Planeta PVE:\n\n  - Ao sair, não estava dando para entrar novamente, assim precisando relogar!\n\n* Removida LOGs Tester ao matar NPCs:\n\n  - Alguns Jogadores estavam recebendo logs de testes ao matar NPCs!\n```",
         "author": "Escanor",
         "timestamp": "2026-03-28T13:53:56.049Z",
-        "attachments": []
-      },
-      {
-        "id": "1487120995507638474",
-        "content": "```\n* Atualização Dia 27/03/2026\n\n* Atualização do Sistema de Clans:\n\n  - Removido o Buff de DBCoins e PGs por level!\n\n  - Sistema de Level Simples! Todos os leveis possuirá o mesmo custo em XP para upar!\n\n  - Para obter XP? Cada NPC morto por cada membro do Clan ganhará XP!\n\n  - A Cada x5 leveis o Sistema recompensará todos do clan com x1 dia de um dos Boosters:\n\n    - Booster Extremo (+0.3x Drop Final)\n    - Booster PG (+0.5x Ganho de PG )\n    - Booster DBCoins (+0.5x Ganho de DBCoins ao Matar Inimigos )\n\n    * Lembrando que para receber essa recompensa, O membro deve ter pelo menos 12 Horas registradas dentro do Clan!\n\n  - Leveis infinitos, O Clan não possui mais limite de level!\n\n  - Liberação da Criação de Clan!\n\n  - Custo inicial de 6.55kk, Valor reajustado com a inflação a cada dia!\n\n  - Futuramente anunciaremos recompensas semanais para o TOP Clan mais upado do servidor!\n\n  - Futuramente anunciaremos eventos semanais entre clans!\n\n* Ajuste do Dano em PVP:\n\n  - Diminuição do Dano em PVP Diminuido em -60%!\n```",
-        "author": "Escanor",
-        "timestamp": "2026-03-27T16:07:54.701Z",
         "attachments": []
       }
     ]
