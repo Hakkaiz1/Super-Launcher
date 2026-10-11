@@ -1,9 +1,16 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-10T12:19:35.823Z",
+  "generatedAt": "2026-10-11T11:50:57.480Z",
   "updates": {
-    "cursor": "1558449427574816779",
+    "cursor": "1558808613617799189",
     "messages": [
+      {
+        "id": "1558808613617799189",
+        "content": "```\n* Atualização Dia 11/10/2026\n\n* Adicionado: \n- Bosses 235 e 285 na /Arena!\n- Adicionado bosses na PvP E PvE! (Estavam pouco bosses para a grande quantia de jogadores!)\n\n* Corrigido: \n- Corrigido HP dos bosses e guardas da PvE!\n- Corrigido Planeta Bosses da PvE que estavam dropando drop de Guardas!\n\n```",
+        "author": "thorfinn",
+        "timestamp": "2026-10-11T11:48:54.750Z",
+        "attachments": []
+      },
       {
         "id": "1558449427574816779",
         "content": "```\n* Atualização Dia 10/10/2026\n\n* Corrigidos:\n  - Dano em areas safes\n  - Bug de quebrar armadura\n  - o status DEX não estava funcionado corretamente (Isso deve equilibrar o PvP)\n  - Laucher mobile agora consegue jogar normalmente\n\n* Tab-list:\n  - Tentativa de ajustar o espaçamento \n\n* Adicionados:\n  - Possibilidade de usar shaders com o Angelica, precisa de um mod auxiliar que vai ser liberado na sala inicio\n\n```",
@@ -205,13 +212,6 @@
         "content": "```\n* Atualização Dia 30/03/2026\n\n* Sistema de Artefatos e PlanetaBosses:\n\n  - Diminuição do tempo de respawn dos PlanetaBosses para de 30 Minutos para 20 Minutos!\n  - Aumento na Chance de Respawn de 50% para 100%!\n  - Aumento no Drop de Artefatos em Geral em 5x!\n\n* Aumento no Drop de Esponjas das Sagas iniciais em 5x!\n\n* Aumento de Essencia Arcana nos Bosses Iniciais em até 2x!\n\n* Reparo no WorldBoss:\n  \n  - Remoção da Chance de vim o drop ao matar o WorldBoss, Ao invez disso o sistem buffa a quantia final para os jogadores que aplicaram um maior dano!\n```",
         "author": "Escanor",
         "timestamp": "2026-03-30T20:59:24.106Z",
-        "attachments": []
-      },
-      {
-        "id": "1487449666823131146",
-        "content": "```\n* Atualização Dia 28/03/2026\n\n* Reparado o Teleport do Planeta PVE:\n\n  - Ao sair, não estava dando para entrar novamente, assim precisando relogar!\n\n* Removida LOGs Tester ao matar NPCs:\n\n  - Alguns Jogadores estavam recebendo logs de testes ao matar NPCs!\n```",
-        "author": "Escanor",
-        "timestamp": "2026-03-28T13:53:56.049Z",
         "attachments": []
       }
     ]
