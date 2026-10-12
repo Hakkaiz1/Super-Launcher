@@ -1,9 +1,16 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-11T11:50:57.480Z",
+  "generatedAt": "2026-10-12T15:15:06.809Z",
   "updates": {
-    "cursor": "1558808613617799189",
+    "cursor": "1559220280755495086",
     "messages": [
+      {
+        "id": "1559220280755495086",
+        "content": "```\n* Atualização Dia 12/10/2026 (DIA DAS CRIANÇAS)\n\n* Adicionado: \n- Evento dias das crianças\n  - Adicionado mundo dos sonhos, lá tem bosses que vai dropar essencia especial do evento\n  - Adicionado titulo do Evento (Hunter) se pega no trocador do evento\n  - Adicionado 2 formas (Onirica e Flagelo) \n  - Adicionado easter egg no mundo dos sonhos (precisa procurar)\n  - Adicionado caixa dias das crianças (Vai vim ess do evento, dbcoins, esponja e fragmento da skin primitiva) \n  - Adicionado orb Onirica \n  - Adicionado barra de progressão do evento, a cada etapa ganha 1 key para cada jogador online\n  - Adicionado missões diarias do evento (Não conta no limite das missões diarias) /md vai ter md dos sonhos\n  - Durante o evento vai ser contabilizado os top 10 jogadores que mais mataram NPC'S do evento e ganharam um Titulo exclusivo (Sonhador) e alguns outros bônus que ainda será divulgado\n  - Adicionado baú dos sonhos (Vai aparecer um baú em alguma localização dentro do mundo dos sonhos com drops)\n  - Adicionado boss do evento que todos que baterem vão ganhar a recompensa dele\n- Mensagem automática que irá avisa ao jogador se ele ainda tem entradas no evento invasão\n- Adicionado /titulos:\n  - Você vai poder gerir os titulos que quer exibir da forma que preferir\n- Adicionado pacote de essencia divina\n\n* Alterado:\n- Limite de entradas diarias do evento invasão de 2 para 4\n- Tempo do evento invasão de 10 para 15 minutos\n- XP que ganha no Worldboss (do clan)\n- Multiplicando em x5 o xp que ganha matando npcs (do clan)\n\n* Corrigido: \n- Evento fight hitkill\n- Problema do /invasao contabilizar msm sem ser teleportado\n- Bug de todos os jogadores cairem do servidor do nada\n- Mostrar a % de drop de party em clan\n```",
+        "author": "Lopes",
+        "timestamp": "2026-10-12T15:04:43.844Z",
+        "attachments": []
+      },
       {
         "id": "1558808613617799189",
         "content": "```\n* Atualização Dia 11/10/2026\n\n* Adicionado: \n- Bosses 235 e 285 na /Arena!\n- Adicionado bosses na PvP E PvE! (Estavam pouco bosses para a grande quantia de jogadores!)\n\n* Corrigido: \n- Corrigido HP dos bosses e guardas da PvE!\n- Corrigido Planeta Bosses da PvE que estavam dropando drop de Guardas!\n\n```",
@@ -205,13 +212,6 @@
         "content": "```\n* Atualização Dia 02/04/2026\n\n* Regulagem no Sistema de PVP:\n\n  - Aumento na margem do Sistema Anti-KillAura! ( Isso diminuir ainda mais os golpes fantasmas )\n  - Aumento no Dano em PVP em +30%!\n\n* Reparados os Bosses da Arena:\n\n  - Não estavam sendo liberados!\n  - Chance de 50% a cada 30 Minutos!\n```",
         "author": "Escanor",
         "timestamp": "2026-04-02T23:06:54.987Z",
-        "attachments": []
-      },
-      {
-        "id": "1488281514985918697",
-        "content": "```\n* Atualização Dia 30/03/2026\n\n* Sistema de Artefatos e PlanetaBosses:\n\n  - Diminuição do tempo de respawn dos PlanetaBosses para de 30 Minutos para 20 Minutos!\n  - Aumento na Chance de Respawn de 50% para 100%!\n  - Aumento no Drop de Artefatos em Geral em 5x!\n\n* Aumento no Drop de Esponjas das Sagas iniciais em 5x!\n\n* Aumento de Essencia Arcana nos Bosses Iniciais em até 2x!\n\n* Reparo no WorldBoss:\n  \n  - Remoção da Chance de vim o drop ao matar o WorldBoss, Ao invez disso o sistem buffa a quantia final para os jogadores que aplicaram um maior dano!\n```",
-        "author": "Escanor",
-        "timestamp": "2026-03-30T20:59:24.106Z",
         "attachments": []
       }
     ]
