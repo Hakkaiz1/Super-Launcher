@@ -1,9 +1,16 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-12T15:15:06.809Z",
+  "generatedAt": "2026-10-13T13:33:27.149Z",
   "updates": {
-    "cursor": "1559220280755495086",
+    "cursor": "1559556603852627979",
     "messages": [
+      {
+        "id": "1559556603852627979",
+        "content": "```\n* Atualização Dia 13/10/2026\n\n* Atualização:\n - Alterado rotas do /invasão para ficarem parelhas ao planeta!\n - Adicionado uma segunda rota de cada boss (Dão 8 boss no total!)\n\n```",
+        "author": "thorfinn",
+        "timestamp": "2026-10-13T13:21:09.519Z",
+        "attachments": []
+      },
       {
         "id": "1559220280755495086",
         "content": "```\n* Atualização Dia 12/10/2026 (DIA DAS CRIANÇAS)\n\n* Adicionado: \n- Evento dias das crianças\n  - Adicionado mundo dos sonhos, lá tem bosses que vai dropar essencia especial do evento\n  - Adicionado titulo do Evento (Hunter) se pega no trocador do evento\n  - Adicionado 2 formas (Onirica e Flagelo) \n  - Adicionado easter egg no mundo dos sonhos (precisa procurar)\n  - Adicionado caixa dias das crianças (Vai vim ess do evento, dbcoins, esponja e fragmento da skin primitiva) \n  - Adicionado orb Onirica \n  - Adicionado barra de progressão do evento, a cada etapa ganha 1 key para cada jogador online\n  - Adicionado missões diarias do evento (Não conta no limite das missões diarias) /md vai ter md dos sonhos\n  - Durante o evento vai ser contabilizado os top 10 jogadores que mais mataram NPC'S do evento e ganharam um Titulo exclusivo (Sonhador) e alguns outros bônus que ainda será divulgado\n  - Adicionado baú dos sonhos (Vai aparecer um baú em alguma localização dentro do mundo dos sonhos com drops)\n  - Adicionado boss do evento que todos que baterem vão ganhar a recompensa dele\n- Mensagem automática que irá avisa ao jogador se ele ainda tem entradas no evento invasão\n- Adicionado /titulos:\n  - Você vai poder gerir os titulos que quer exibir da forma que preferir\n- Adicionado pacote de essencia divina\n\n* Alterado:\n- Limite de entradas diarias do evento invasão de 2 para 4\n- Tempo do evento invasão de 10 para 15 minutos\n- XP que ganha no Worldboss (do clan)\n- Multiplicando em x5 o xp que ganha matando npcs (do clan)\n\n* Corrigido: \n- Evento fight hitkill\n- Problema do /invasao contabilizar msm sem ser teleportado\n- Bug de todos os jogadores cairem do servidor do nada\n- Mostrar a % de drop de party em clan\n```",
@@ -205,13 +212,6 @@
         "content": "```\n* Atualização Dia 03/04/2026\n\n* Nerf no Dano dos Bosses Level 180+```",
         "author": "Escanor",
         "timestamp": "2026-04-03T21:09:24.024Z",
-        "attachments": []
-      },
-      {
-        "id": "1489400768703500389",
-        "content": "```\n* Atualização Dia 02/04/2026\n\n* Regulagem no Sistema de PVP:\n\n  - Aumento na margem do Sistema Anti-KillAura! ( Isso diminuir ainda mais os golpes fantasmas )\n  - Aumento no Dano em PVP em +30%!\n\n* Reparados os Bosses da Arena:\n\n  - Não estavam sendo liberados!\n  - Chance de 50% a cada 30 Minutos!\n```",
-        "author": "Escanor",
-        "timestamp": "2026-04-02T23:06:54.987Z",
         "attachments": []
       }
     ]
