@@ -1,9 +1,16 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-13T19:15:12.052Z",
+  "generatedAt": "2026-10-14T17:26:43.035Z",
   "updates": {
-    "cursor": "1559642154220126351",
+    "cursor": "1559975259975975057",
     "messages": [
+      {
+        "id": "1559975259975975057",
+        "content": "```\n* Atualização Dia 14/10/2026\n\n* Adicionado:\n  - Drop de essencia flagelo\n  - Easter Egg 3\n  - Adicionado titulo flagelo (5% de bonus de drop geral do servidor)\n\n* Corrigido:\n  - Party:\n    - Corrigido % de drop do clan estava funcionando mesmo que os jogadores longe\n    - Corrigido % de drop do clan mesmo sem pa/pd medio \n    - Agora party com 2 do clan ganha 50% de drop a mais \n    \n  - Guerra:\n    - Corrigido o bonus ser givado para todos da vanguarda sem mesmo bater no npc\n    - Corrigido rebalanceamento diario (vamos rebalancear novamente hoje)\n  \n  - Lag: \n    - Depois de analise de relatórios, aplicamos uma tentativa de correção vamos continuar analisando\n  \n  - Att vip: \n    - Corrigido passar os status limite do treino\n\n  - Npc trocador:\n    - Alguns slots estavam sendo bloqueados após atualização que teve de madrugada\n\n* Alterado:\n  - RD: \n    - Recompensa diaria agr está melhor, e pode vim essencia divina\n```",
+        "author": "Lopes",
+        "timestamp": "2026-10-14T17:04:44.917Z",
+        "attachments": []
+      },
       {
         "id": "1559642154220126351",
         "content": "```\n* Atualização Dia 13/10/2026\n\n* Atualização:\n - Alterado rotas do /invasão para ficarem parelhas ao planeta!\n - Adicionado uma segunda rota de cada boss (Dão 8 boss no total!)\n\n* Ajustado:\n  - filtro /filtros: \n    - agora é um menu onde você seleciona os itens \n    - resolvido problema de tirar um nucleo e tirar todos\n  - Guerra:\n    - Agora a guerra embaralha a sua vanguarda em toda guerra que começa\n    - Ajustado bonus de PG ao matar o cristal\n    - Ajustado ganho de PG ao matar player\n  - Evento dia das crianças:\n    - Alterado local de alguns spawn\n  - Lag:\n    - Estamos analisando o Lag parcial que está ocorrendo\n    - Colocamos um ajuste (teste) \n    - Colocamos para ser gerado relatório para que conseguimos achar a causa raiz do problema\n  - Ajustado caixa da guerra\n  - Alterado preço do romp guerra 1 de 32 permissões para 24\n  - spawn dos worldboss\n\n* Adicionado:\n  - Adicionado titulo sonhador: \n    - Ganha 2% de bonus para status do DBC (Ataque e defesa)\n```",
@@ -205,13 +212,6 @@
         "content": "```\n* Atualização Dia 07/04/2026\n\n* Reparado Boosters de DBCoins e PG:\n\n  - Não estavam tendo o tempo subtraido!\n\n* Adicionado NPCs de Teleport das Dungeons do Planeta Glacial!\n\n* Reparado o Sistema de WorldBosses:\n\n  - Todos os jogadores estavam ganhando o buff minimo de 1x!\n  - Sistema de detectação de drop por dano reparado! Agora o sistema vai até 3x se você aplicar até 5% do dano total!\n\n* Liberado o WorldBoss do Planeta Glacial!\n\n* Reparado o Limite de Jogadores por Clan:\n\n  - O bug acontecia quando um lider do Clan enviava o pedido! Dessa forma ultrapassava a barreira do sistema!\n  - Pedimos para que se organizem e limitem seus clans em 5 jogadores!\n  - Caso não faça isso, O sistema expulsará um jogador aleatório...\n```",
         "author": "Escanor",
         "timestamp": "2026-04-07T03:33:37.237Z",
-        "attachments": []
-      },
-      {
-        "id": "1490549815220768869",
-        "content": "```\n* Atualização Dia 06/04/2026\n\n* Reparado o Castelo de Nivel 2:\n\n  - Estava kikando os Jogadores ao entrar!\n\n* Reparado o /PD do Planeta Glacial:\n\n  - Problemas com o Dominio: Não estava contando as mortes dos Inimigos!\n```",
-        "author": "Escanor",
-        "timestamp": "2026-04-06T03:12:49.025Z",
         "attachments": []
       }
     ]
