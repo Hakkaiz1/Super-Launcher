@@ -1,9 +1,16 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-10-14T17:26:43.035Z",
+  "generatedAt": "2026-10-15T18:42:00.176Z",
   "updates": {
-    "cursor": "1559975259975975057",
+    "cursor": "1560353129772490857",
     "messages": [
+      {
+        "id": "1560353129772490857",
+        "content": "```\n* Atualização Dia 15/10/2026\n\n* Adicionado:\n  - Submudo do Planeta celestial (Teleporte fica dentro do planeta PvP)\n    - Bosses 3x mais fortes\n    - 300% de drop a mais (não soma o 50% PvP)\n    - Bosses com respawn mais rapido \n    - Valor de entrada 500k + key de entrada\n  - Adicionado nova armadura de token I \n\n* Corrigido:\n  - Guerra:\n    - Corrigido o bonus ser givado para quem deu dano no NPC\n    - Refeito o sistema de salvar informações \n\n* Alterado:\n  - Valor da Armadura de Token I de 48 para 32 a espada Lança Eterno, e armadura 16 cada peça\n```",
+        "author": "Lopes",
+        "timestamp": "2026-10-15T18:06:16.097Z",
+        "attachments": []
+      },
       {
         "id": "1559975259975975057",
         "content": "```\n* Atualização Dia 14/10/2026\n\n* Adicionado:\n  - Drop de essencia flagelo\n  - Easter Egg 3\n  - Adicionado titulo flagelo (5% de bonus de drop geral do servidor)\n\n* Corrigido:\n  - Party:\n    - Corrigido % de drop do clan estava funcionando mesmo que os jogadores longe\n    - Corrigido % de drop do clan mesmo sem pa/pd medio \n    - Agora party com 2 do clan ganha 50% de drop a mais \n    \n  - Guerra:\n    - Corrigido o bonus ser givado para todos da vanguarda sem mesmo bater no npc\n    - Corrigido rebalanceamento diario (vamos rebalancear novamente hoje)\n  \n  - Lag: \n    - Depois de analise de relatórios, aplicamos uma tentativa de correção vamos continuar analisando\n  \n  - Att vip: \n    - Corrigido passar os status limite do treino\n\n  - Npc trocador:\n    - Alguns slots estavam sendo bloqueados após atualização que teve de madrugada\n\n* Alterado:\n  - RD: \n    - Recompensa diaria agr está melhor, e pode vim essencia divina\n```",
@@ -205,13 +212,6 @@
         "content": "```\n* Atualização Dia 08/04/2026\n\n* Buff no drop da Essencia Glacial em 2x!\n\n* Criação da Caixa Épica.\n\n* Liberação das Missões Diarias de Tier Glacial:\n\n  - Nivel 11 até 20\n  - Chave Epica!\n\n* Reparado o Buff de +100% da dominação diária do Planeta Glacial no /PD!\n```",
         "author": "Escanor",
         "timestamp": "2026-04-08T21:13:52.717Z",
-        "attachments": []
-      },
-      {
-        "id": "1490917438466949130",
-        "content": "```\n* Atualização Dia 07/04/2026\n\n* Reparado Boosters de DBCoins e PG:\n\n  - Não estavam tendo o tempo subtraido!\n\n* Adicionado NPCs de Teleport das Dungeons do Planeta Glacial!\n\n* Reparado o Sistema de WorldBosses:\n\n  - Todos os jogadores estavam ganhando o buff minimo de 1x!\n  - Sistema de detectação de drop por dano reparado! Agora o sistema vai até 3x se você aplicar até 5% do dano total!\n\n* Liberado o WorldBoss do Planeta Glacial!\n\n* Reparado o Limite de Jogadores por Clan:\n\n  - O bug acontecia quando um lider do Clan enviava o pedido! Dessa forma ultrapassava a barreira do sistema!\n  - Pedimos para que se organizem e limitem seus clans em 5 jogadores!\n  - Caso não faça isso, O sistema expulsará um jogador aleatório...\n```",
-        "author": "Escanor",
-        "timestamp": "2026-04-07T03:33:37.237Z",
         "attachments": []
       }
     ]
